@@ -16,6 +16,7 @@
     "outDir": "./dist",
     "rootDir": "src",
     "removeComments": true
+    // "moduleSuffixes": [".ios", ".native", ""]
     // "allowSyntheticDefaultImports": true,
     // "declaration": true
   }
