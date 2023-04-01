@@ -2,10 +2,12 @@
   "name": "viewer-queue-webserver",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "webserver.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon src/webserver.js",
+    "dev": "nodemon src/webserver.ts",
+    "build": "tsc -p .",
+    "start": "npm run build -- -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "coreyg142",
@@ -16,10 +18,15 @@
     "firebase-admin": "^11.5.0"
   },
   "devDependencies": {
+    "@tsconfig/node-lts": "^18.12.1",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.22",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "typescript": "^5.0.3",
+    "ts-node": "^10.9.1"
   }
 }

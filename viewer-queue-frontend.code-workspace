@@ -1,11 +1,8 @@
 {
   "folders": [
-	{
-		"path": "viewer-queue-frontend"
-	},
-	{
-		"path": "viewer-queue-webserver"
-	}
-],
+    {
+      "path": "viewer-queue-webserver"
+    }
+  ],
   "settings": {}
 }
