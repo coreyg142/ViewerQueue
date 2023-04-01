@@ -2,23 +2,24 @@ import { db } from "./db.js";
 
 console.log("Running db query");
 
-const docRef = db.collection("ViewerQueue").doc("usernameArray");
+const docRef = db.collection("ViewerQueue").doc("namesLists");
 const document = await docRef.get();
-export let namesList: Array<string> = document?.data()?.usernameArray;
-
-console.log(namesList);
+export let queuedNames: Array<string> = document?.data()?.queuedNames;
+export let poppedNames: Array<string> = document?.data()?.poppedNames;
 
 export async function addName(name: string) {
   name = name.trim();
-  if (!namesList.includes(name)) {
+  if (queuedNames.includes(name)) {
     return { error: "You are already in the queue!" };
   }
 
-  namesList.push(name);
-  console.log(`Adding ${name} to the queue at position ${namesList.length}`);
+  queuedNames.push(name);
+  console.log(`Adding ${name} to the queue at position ${queuedNames.length}`);
   try {
-    await docRef.update({ namesList });
-    return { result: `Successfully added ${name} to the queue` };
+    await docRef.update({ queuedNames });
+    return {
+      result: `Successfully added to the queue at position ${queuedNames.length}`,
+    };
   } catch (e) {
     console.error(e);
     return { error: "Something went wrong" };
@@ -26,14 +27,14 @@ export async function addName(name: string) {
 }
 
 export async function deleteName(name: string) {
-  if (!namesList.includes(name)) {
+  if (!queuedNames.includes(name)) {
     return { error: "That username is not in the queue" };
   }
-  const idx = namesList.findIndex((s) => s === name);
-  const deleting = namesList.splice(idx, 1);
+  const idx = queuedNames.findIndex((s) => s === name);
+  const deleting = queuedNames.splice(idx, 1);
   console.log(`Removing ${deleting} from the queue`);
   try {
-    await docRef.update({ namesList });
+    await docRef.update({ queuedNames });
     return { result: `Successfully removed ${name} from the queue` };
   } catch (e) {
     console.error(e);
@@ -41,18 +42,36 @@ export async function deleteName(name: string) {
   }
 }
 
-export function reOrderName(name: string, newIdx: number) {
-  if (!namesList.includes(name)) {
+export async function popName() {
+  if (queuedNames.length === 0) {
+    return { error: "There are no names in the queue" };
+  }
+  const name = queuedNames.shift() || "";
+  poppedNames.unshift(name);
+  console.log(`Popping ${name} from the queue`);
+  try {
+    await docRef.update({ queuedNames });
+    await docRef.update({ poppedNames });
+    return { result: `${name} is the next name!` };
+  } catch (e) {
+    console.error(e);
+    return { error: "Something went wrong getting the next name" };
+  }
+}
+
+export async function reOrderName(name: string, newIdx: number) {
+  if (!queuedNames.includes(name)) {
     return { error: "That username is not in the queue" };
   }
-  const idx = namesList.findIndex((s) => s === name);
-  const moving = namesList.splice(idx, 1);
-  namesList.splice(newIdx, 0, moving[0]);
+  const idx = queuedNames.findIndex((s) => s === name);
+  const moving = queuedNames.splice(idx, 1);
+  queuedNames.splice(newIdx, 0, moving[0]);
   console.log(`Moving ${moving} to position ${newIdx}`);
+  // TODO: update DB
 }
 
 export async function forceSync() {
   const document = await docRef.get();
-  namesList = document?.data()?.usernameArray;
+  queuedNames = document?.data()?.queuedNames;
   return true;
 }
