@@ -9,7 +9,7 @@ export default class AuthKeyManager {
     return authKey;
   }
 
-  static checkAuthKey(authKey: string): boolean {
+  static verifyKey(authKey: string): boolean {
     if (this.authKeysMap.has(authKey)) {
       const time = this.authKeysMap.get(authKey);
       if (time && Date.now() - time < 1000 * 60 * 60 * 2) {
