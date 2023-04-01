@@ -1,0 +1,25 @@
+{
+  "name": "viewer-queue-webserver",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "webserver.js",
+  "scripts": {
+    "dev": "nodemon src/webserver.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "coreyg142",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.4.1"
+  }
+}
