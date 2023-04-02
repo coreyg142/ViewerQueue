@@ -1,24 +1,30 @@
 import crypto from "crypto";
 
 export default class AuthKeyManager {
-  static authKeysMap: Map<string, number> = new Map<string, number>();
+  static authKeysMap: Map<string, [string, number]> = new Map<string, [string, number]>();
 
-  static genAuthKey(): string {
+  static genAuthKey(ipAddress: string): string {
     const authKey = crypto.randomBytes(48).toString("hex");
-    this.authKeysMap.set(authKey, Date.now());
+    this.authKeysMap.set(authKey, [ipAddress, Date.now()]);
+    // console.log(`Generated auth key ${authKey} for ${ipAddress}`);
     return authKey;
   }
 
-  static verifyKey(authKey: string): boolean {
+  static verifyKey(authKey: string, requestingIpAddr: string): boolean {
     if (this.authKeysMap.has(authKey)) {
-      const time = this.authKeysMap.get(authKey);
-      if (time && Date.now() - time < 1000 * 60 * 60 * 2) {
-        return true;
-      } else {
-        this.authKeysMap.delete(authKey);
-        return false;
+      const meta = this.authKeysMap.get(authKey);
+      if (meta) {
+        const [ipAddress, time] = meta;
+
+        if (requestingIpAddr === ipAddress && time && Date.now() - time < 1000 * 60 * 60 * 2) {
+          return true;
+        } else {
+          this.authKeysMap.delete(authKey);
+          return false;
+        }
       }
-    } else return false;
+    }
+    return false;
   }
 
   constructor() {}

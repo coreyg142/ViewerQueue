@@ -1,3 +1,4 @@
+import { Server } from "socket.io";
 import { db } from "./db.js";
 
 console.log("Running db query");
@@ -68,6 +69,20 @@ export async function reOrderName(name: string, newIdx: number) {
   queuedNames.splice(newIdx, 0, moving[0]);
   console.log(`Moving ${moving} to position ${newIdx}`);
   // TODO: update DB
+}
+
+export async function clearQueues(io: Server) {
+  queuedNames = [];
+  poppedNames = [];
+  try {
+    await docRef.update({ queuedNames });
+    await docRef.update({ poppedNames });
+    io.emit("refresh-lists", queuedNames, poppedNames);
+    return { result: "Successfully cleared queues" };
+  } catch (e) {
+    console.error(e);
+    return { error: "Something went wrong" };
+  }
 }
 
 export async function forceSync() {
