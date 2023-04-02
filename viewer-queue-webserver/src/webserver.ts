@@ -7,7 +7,7 @@ import { clearQueues } from "./utils/names.js";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
+export const io = new Server(server, {
   cors: {
     origin: "http://localhost:8080",
   },
@@ -46,7 +46,7 @@ app.post("/authenticate", (req, res) => {
  * Below section for development purposes only. Remove for production.
  */
 app.delete("/clearqueues", (req, res) => {
-  clearQueues(io);
+  clearQueues();
   res.status(200).json({ message: "queues cleared" });
 });
 

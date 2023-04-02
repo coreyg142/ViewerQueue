@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { db } from "./db.js";
-
+import { io } from "../webserver.js";
 console.log("Running db query");
 
 const docRef = db.collection("ViewerQueue").doc("namesLists");
@@ -8,7 +8,14 @@ const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
 
-export async function addName(name: string) {
+export async function addName(name: string, testSet: boolean) {
+  if (testSet) {
+    const testNames = ["test1", "test2", "test3", "test4", "test5"];
+    queuedNames = testNames;
+    await docRef.update({ queuedNames });
+    io.emit("refresh-lists", queuedNames, poppedNames);
+    return { result: "Successfully added test names to the queue" };
+  }
   name = name.trim();
   if (queuedNames.includes(name)) {
     return { error: "You are already in the queue!" };
@@ -71,7 +78,7 @@ export async function reOrderName(name: string, newIdx: number) {
   // TODO: update DB
 }
 
-export async function clearQueues(io: Server) {
+export async function clearQueues() {
   queuedNames = [];
   poppedNames = [];
   try {

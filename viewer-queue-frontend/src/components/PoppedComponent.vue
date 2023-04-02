@@ -1,14 +1,14 @@
 <template>
   <div class="queuebox">
-    <h2>Queued names</h2>
+    <h2>Previous names</h2>
     <div class="queue">
-      <transition-group name="list" tag="ol" class="nameUL">
+      <transition-group name="list" tag="ol" class="nameUL" reversed>
         <li v-for="item in queue" :key="item" class="list-item">
           <QueueItemComponent :name="item" />
         </li>
       </transition-group>
       <transition name="emptyMsg"
-        ><p v-if="queue.length === 0" class="empty">The queue is empty.</p>
+        ><p v-if="queue.length === 0" class="empty">The list is empty.</p>
       </transition>
     </div>
   </div>
@@ -27,7 +27,7 @@ export default defineComponent({
   },
   computed: {
     queue() {
-      return state.queuedNames;
+      return state.poppedNames;
     },
   },
 });
@@ -59,7 +59,7 @@ ul.nameUL,
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(-30px);
 }
 
 /* ensure leaving items are taken out of layout flow so that moving

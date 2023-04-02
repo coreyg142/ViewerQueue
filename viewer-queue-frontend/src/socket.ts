@@ -1,32 +1,32 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
 import axios from "axios";
-import { hostname } from "./main";
+import { apiUrl } from "./main";
 export const state = reactive({
   connected: false,
   queuedNames: [] as string[],
   poppedNames: [] as string[],
 });
 
-export const socket = io(hostname);
+export const socket = io(apiUrl);
 socket.on("name-added", (...args) => {
-  console.log("Name added");
-  console.log(args[0]);
   state.queuedNames.push(args[0]);
 });
 
 socket.on("name-popped", (...args) => {
-  console.log("Name popped");
-  console.log(args[0]);
-  state.poppedNames.push(args[0]);
+  state.poppedNames.unshift(args[0]);
   state.queuedNames.shift();
+});
+
+socket.on("refresh-lists", (...args) => {
+  state.queuedNames = args[0];
+  state.poppedNames = args[1];
 });
 
 socket.on("connect", async () => {
   state.connected = true;
   console.log("Connected to socket");
-  const response = await axios.get(hostname + "/queue");
-  console.log(response);
+  const response = await axios.get(apiUrl + "/queue");
   state.queuedNames = response.data.lists.queued;
-  console.log(state.queuedNames);
+  state.poppedNames = response.data.lists.popped;
 });
