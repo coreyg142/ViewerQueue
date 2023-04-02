@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
 import QueueComponent from "@/components/QueueComponent.vue";

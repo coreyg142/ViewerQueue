@@ -8,8 +8,9 @@ const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
 
-export async function addName(name: string, testSet: boolean) {
-  if (testSet) {
+export async function addName(name: string) {
+  if (name === "testSet") {
+    //TODO: remove this later
     const testNames = ["test1", "test2", "test3", "test4", "test5"];
     queuedNames = testNames;
     await docRef.update({ queuedNames });

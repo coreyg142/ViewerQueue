@@ -12,15 +12,6 @@ export default async function addName(req: Request, res: Response, io: Server) {
   const key = method === "POST" ? req.headers?.key : req.query?.key;
   const testSet = req.body?.testSet;
 
-  if (testSet) {
-    const result = await add(name, true);
-    if (result.error) {
-      res.status(400).json({ error: result.error });
-      return;
-    }
-    res.status(200).json({ result: result.result });
-    return;
-  }
   if (
     (method === "GET" && key === process.env.WRITE_KEY) ||
     (method === "POST" && typeof key === "string" && AuthKeyManager.verifyKey(key, req.ip))
@@ -30,13 +21,13 @@ export default async function addName(req: Request, res: Response, io: Server) {
       return;
     }
 
-    const result = await add(name, false);
+    const result = await add(name);
     if (result.error) {
       res.status(400).json({ error: result.error });
       return;
     }
     res.status(200).json({ result: result.result });
-    io.emit("name-added", name);
+    if (name !== "testSet") io.emit("name-added", name);
     return;
   } else {
     res.status(401).json({ error: "Unauthorized" });
