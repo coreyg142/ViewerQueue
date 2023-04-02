@@ -4,13 +4,14 @@ import createPersistedState from "vuex-persistedstate";
 export default createStore({
   plugins: [
     createPersistedState({
-      paths: ["loggedIn", "accessKey"],
+      paths: ["loggedIn", "accessKey", "logInTime", "queuedOrPrev"],
     }),
   ],
   state: {
     loggedIn: false,
     accessKey: "",
     logInTime: -1,
+    queuedOrPrev: true,
   },
   getters: {},
   mutations: {
@@ -22,6 +23,9 @@ export default createStore({
     },
     setLogInTime(state, logInTime: number) {
       state.logInTime = logInTime;
+    },
+    setQueuedOrPrev(state, queuedOrPrev: boolean) {
+      state.queuedOrPrev = queuedOrPrev;
     },
   },
   actions: {
@@ -36,6 +40,9 @@ export default createStore({
       commit("setAccessKey", "");
       commit("setLoggedIn", false);
       commit("setLogInTime", -1);
+    },
+    setQueuedOrPrev({ commit }, queuedOrPrev: boolean) {
+      commit("setQueuedOrPrev", queuedOrPrev);
     },
   },
   modules: {},

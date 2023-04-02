@@ -1,14 +1,13 @@
 <template>
   <div class="container">
     <nav>
-      <router-link tabindex="0" to="/viewerqueue">Queue</router-link> |
+      <router-link to="/viewerqueue">Queue</router-link> |
       <router-link v-if="!loggedIn" to="/login">
         Access moderator controls
       </router-link>
       <div
         role="button"
         style="display: inline"
-        tabindex="1"
         class="logout"
         v-on:click="logout"
         v-if="loggedIn"

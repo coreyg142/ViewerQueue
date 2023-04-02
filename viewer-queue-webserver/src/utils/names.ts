@@ -20,6 +20,9 @@ export async function addName(name: string, testSet: boolean) {
   if (queuedNames.includes(name)) {
     return { error: "You are already in the queue!" };
   }
+  if (poppedNames.includes(name)) {
+    return { error: "You have already been chosen!" };
+  }
 
   queuedNames.push(name);
   console.log(`Adding ${name} to the queue at position ${queuedNames.length}`);

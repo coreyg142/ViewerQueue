@@ -2,13 +2,12 @@
   <div class="home">
     <img
       class="rudeimg"
-      alt="Rudeism"
+      alt="Multilocke Name Queue"
       src="../assets/multilockeheader-transparent.png"
     />
     <br />
     <div
       role="button"
-      tabindex="2"
       style="display: inline"
       class="queueBtn btn"
       v-on:click="toggleQueue"
@@ -19,7 +18,6 @@
     <span> | </span>
     <div
       role="button"
-      tabindex="3"
       style="display: inline"
       class="prevBtn btn"
       v-on:click="togglePrev"
@@ -39,8 +37,10 @@
 <script lang="ts">
 /* eslint-disable */
 import { defineComponent } from "vue";
+import { mapActions } from "vuex";
 import QueueComponent from "@/components/QueueComponent.vue";
 import PoppedComponent from "@/components/PoppedComponent.vue";
+import store from "@/store";
 
 export default defineComponent({
   name: "QueueView",
@@ -48,17 +48,18 @@ export default defineComponent({
     QueueComponent,
     PoppedComponent,
   },
-  data() {
-    return {
-      queuedOrPrev: true,
-    };
+  computed: {
+    queuedOrPrev() {
+      return store.state.queuedOrPrev;
+    },
   },
   methods: {
+    ...mapActions(["setQueuedOrPrev"]),
     toggleQueue() {
-      this.queuedOrPrev = true;
+      this.setQueuedOrPrev(true);
     },
     togglePrev() {
-      this.queuedOrPrev = false;
+      this.setQueuedOrPrev(false);
     },
   },
 });
@@ -77,6 +78,7 @@ export default defineComponent({
   height: 25%;
   object-fit: contain;
   padding-bottom: 2%;
+  pointer-events: none;
 }
 
 .btn {
