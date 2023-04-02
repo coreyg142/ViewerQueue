@@ -17,10 +17,13 @@ export async function addName(name: string, testSet: boolean) {
     return { result: "Successfully added test names to the queue" };
   }
   name = name.trim();
-  if (queuedNames.includes(name)) {
+  // convert queuedNames to all lowercase
+  const lowercaseQN = queuedNames.map((s) => s.toLowerCase());
+  const lowercasePN = poppedNames.map((s) => s.toLowerCase());
+  if (lowercaseQN.includes(name.toLowerCase())) {
     return { error: "You are already in the queue!" };
   }
-  if (poppedNames.includes(name)) {
+  if (lowercasePN.includes(name.toLowerCase())) {
     return { error: "You have already been chosen!" };
   }
 
