@@ -1,4 +1,4 @@
-# viewer-queue
+# viewer-queue-frontent
 
 ## Project setup
 ```
