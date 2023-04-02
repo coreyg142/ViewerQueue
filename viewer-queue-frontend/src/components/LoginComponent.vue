@@ -7,6 +7,7 @@
       autocomplete="off"
       v-model="password"
       placeholder="Access code"
+      v-on:keypress="submitOnEnter"
     />
     <button v-on:click="submit">Submit</button>
     <Transition name="fade">
@@ -31,6 +32,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(["setAccessKey"]),
+    async submitOnEnter(event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        await this.submit();
+      }
+    },
     async submit() {
       try {
         const response = await axios.post(`${this.apiUrl}/authenticate`, {
@@ -46,6 +52,7 @@ export default defineComponent({
         }
       } catch (error) {
         this.invalidCode = true;
+        this.password = "";
       }
     },
   },
