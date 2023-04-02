@@ -5,19 +5,19 @@
       alt="Rudeism"
       src="../assets/multilockeheader-transparent.png"
     />
-    <ViewerQueue />
+    <QueueComponent />
   </div>
 </template>
 
 <script lang="ts">
 /* eslint-disable */
 import { defineComponent } from "vue";
-import ViewerQueue from "@/components/ViewerQueue.vue";
+import QueueComponent from "@/components/QueueComponent.vue";
 
 export default defineComponent({
   name: "QueueView",
   components: {
-    ViewerQueue,
+    QueueComponent,
   },
 });
 </script>

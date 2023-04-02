@@ -12,7 +12,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: "QueueView",
+  name: "QueueComponent",
 
   async mounted() {
     console.log(this.hostname);
@@ -30,7 +30,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-li {
+li,
+p {
   list-style-type: none;
   font-size: 1.5em;
   padding: 0.5em;
