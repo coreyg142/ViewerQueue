@@ -52,7 +52,7 @@ export async function popName() {
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
-    return { result: `${name} is the next name!` };
+    return { result: `${name} is the next name!`, name };
   } catch (e) {
     console.error(e);
     return { error: "Something went wrong getting the next name" };

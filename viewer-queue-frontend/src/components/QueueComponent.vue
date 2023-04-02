@@ -1,6 +1,6 @@
 <template>
   <div class="queue">
-    <div v-if="queue.length === 0">No names in the queue</div>
+    <p v-if="queue.length === 0">No names in the queue</p>
     <li v-else v-for="(item, index) in queue" :key="index">
       {{ index + 1 }} - {{ item }}
     </li>
@@ -9,21 +9,26 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import axios from "axios";
+// import axios from "axios";
+import { state } from "@/socket";
 
 export default defineComponent({
   name: "QueueComponent",
 
   async mounted() {
-    console.log(this.hostname);
-    const response = await axios.get(this.hostname + "/queue");
-    console.log(response.data.lists);
-    this.queue = response.data.lists.queued;
+    // const response = await axios.get(this.hostname + "/queue");
+    // this.queue = state.queuedNames;
+  },
+
+  computed: {
+    queue() {
+      return state.queuedNames;
+    },
   },
   data() {
     return {
-      queue: [],
-      hostname: this.$hostname,
+      // queue: [] as string[],
+      // hostname: this.$hostname,
     };
   },
 });
