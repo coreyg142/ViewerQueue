@@ -139,7 +139,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@import "animate.css";
 .rudeimg {
   width: 30rem;
   height: auto;

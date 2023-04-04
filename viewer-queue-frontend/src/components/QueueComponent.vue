@@ -61,10 +61,10 @@ export default defineComponent({
   transform: translateX(-30px);
 }
 
-/* .list-leave-to {
+.list-leave-to {
   opacity: 0;
   transform: translateX(30px);
-} */
+}
 
 /* ensure leaving items are taken out of layout flow so that moving
    animations can be calculated correctly. */

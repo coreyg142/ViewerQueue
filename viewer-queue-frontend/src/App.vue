@@ -86,6 +86,14 @@ nav a.router-link-exact-active,
   text-decoration: underline;
 }
 
+body,
+html {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
 body {
   background-color: #33135c;
   color: #fff;

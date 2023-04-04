@@ -12,7 +12,7 @@ export let poppedNames: Array<string> = document?.data()?.poppedNames;
 export async function addName(name: string) {
   if (name === "testSet") {
     //TODO: remove this later
-    const testNames = ["test1", "test2", "test3", "test4", "test5"];
+    const testNames = ["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"];
     queuedNames = testNames;
     await docRef.update({ queuedNames });
     io.emit("refresh-lists", queuedNames, poppedNames);
@@ -58,12 +58,20 @@ export async function deleteName(name: string) {
   }
 }
 
-export async function popName() {
+export async function popName(random: boolean) {
   if (queuedNames.length === 0) {
     return { error: "There are no names in the queue" };
   }
-  const name = queuedNames.shift() || "";
-  poppedNames.unshift(name);
+  let name = "";
+  if (!random) {
+    name = queuedNames.shift() || "";
+    poppedNames.unshift(name);
+  } else {
+    name = queuedNames[Math.floor(Math.random() * queuedNames.length)];
+    const idx = queuedNames.findIndex((s) => s === name);
+    queuedNames.splice(idx, 1);
+    poppedNames.unshift(name);
+  }
   console.log(`Popping ${name} from the queue`);
   try {
     await docRef.update({ queuedNames });
