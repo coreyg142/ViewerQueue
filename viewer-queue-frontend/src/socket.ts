@@ -15,7 +15,7 @@ socket.on("name-added", (...args) => {
 
 socket.on("name-popped", (...args) => {
   state.poppedNames.unshift(args[0]);
-  state.queuedNames.shift();
+  state.queuedNames = state.queuedNames.filter((name) => name !== args[0]);
 });
 
 socket.on("refresh-lists", (...args) => {
@@ -25,7 +25,7 @@ socket.on("refresh-lists", (...args) => {
 
 socket.on("connect", async () => {
   state.connected = true;
-  console.log("Connected to socket");
+  // console.log("Connected to socket");
   const response = await axios.get(apiUrl + "/queue");
   state.queuedNames = response.data.lists.queued;
   state.poppedNames = response.data.lists.popped;

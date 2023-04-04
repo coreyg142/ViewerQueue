@@ -1,24 +1,13 @@
 <template>
   <div class="container">
-    <nav>
-      <router-link to="/viewerqueue">Queue</router-link> |
-      <router-link v-if="!loggedIn" to="/login">
-        Access moderator controls
-      </router-link>
-      <div
-        role="button"
-        style="display: inline"
-        class="logout"
-        v-on:click="logout"
-        v-if="loggedIn"
-      >
-        Log out
-      </div>
-    </nav>
-
-    <Transition>
-      <router-view />
+    <Transition name="fade">
+      <NavbarComponent v-if="mounted" />
     </Transition>
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
   </div>
 </template>
 
@@ -26,14 +15,21 @@
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
 import store from "./store";
+import NavbarComponent from "@/components/NavbarComponent.vue";
 
 // route to home on mount
 export default defineComponent({
   name: "App",
 
+  components: {
+    NavbarComponent,
+  },
+  mounted() {
+    this.mounted = true;
+  },
   data() {
     return {
-      bar: " | ",
+      mounted: false,
     };
   },
   methods: {
@@ -66,6 +62,9 @@ export default defineComponent({
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center; */
   /* color: #2c3e50; */
 }
 
@@ -74,14 +73,15 @@ nav {
 }
 
 nav a,
-.logout {
+.btn {
   font-weight: bold;
   color: #ff4365;
   text-decoration: none;
   cursor: pointer;
 }
 
-nav a.router-link-exact-active {
+nav a.router-link-exact-active,
+.btnActive {
   color: #ffd300;
   text-decoration: underline;
 }
@@ -90,13 +90,12 @@ body {
   background-color: #33135c;
   color: #fff;
 }
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
+.fade-enter-active {
+  transition: opacity 0.6s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

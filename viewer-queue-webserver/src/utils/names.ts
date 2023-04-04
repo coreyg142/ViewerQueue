@@ -7,6 +7,7 @@ const docRef = db.collection("ViewerQueue").doc("namesLists");
 const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
+// export let mostRecentPop: string = document?.data()?.mostRecentPop;
 
 export async function addName(name: string) {
   if (name === "testSet") {
@@ -67,6 +68,7 @@ export async function popName() {
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
+    // await docRef.update({ mostRecentPop: name });
     return { result: `${name} is the next name!`, name };
   } catch (e) {
     console.error(e);
@@ -91,6 +93,7 @@ export async function clearQueues() {
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
+    // await docRef.update({ mostRecentPop: "" });
     io.emit("refresh-lists", queuedNames, poppedNames);
     return { result: "Successfully cleared queues" };
   } catch (e) {

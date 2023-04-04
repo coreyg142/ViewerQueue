@@ -1,5 +1,7 @@
 <template>
-  {{ name }}
+  <div style="display: inline-block">
+    <span class="text">{{ name }}</span>
+  </div>
 </template>
 
 <script lang="ts">

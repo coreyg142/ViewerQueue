@@ -2,14 +2,14 @@
   <div class="queuebox">
     <h2>Previous names</h2>
     <div class="queue">
-      <transition-group name="list" tag="ol" class="nameUL" reversed>
+      <TransitionGroup name="list" tag="ol" reversed>
         <li v-for="item in queue" :key="item" class="list-item">
           <QueueItemComponent :name="item" />
         </li>
-      </transition-group>
-      <transition name="emptyMsg"
+      </TransitionGroup>
+      <Transition name="emptyMsg"
         ><p v-if="queue.length === 0" class="empty">The list is empty.</p>
-      </transition>
+      </Transition>
     </div>
   </div>
 </template>
@@ -34,12 +34,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-ul.nameUL,
 .queue {
   text-align: left;
   list-style: decimal;
   position: relative;
   width: fit-content;
+  max-width: 60vw;
+  overflow-wrap: break-word;
   margin: 0 auto;
 }
 
@@ -66,6 +67,7 @@ ul.nameUL,
    animations can be calculated correctly. */
 .list-leave-active {
   position: absolute;
+  opacity: 0;
 }
 
 .emptyMsg-enter-active,

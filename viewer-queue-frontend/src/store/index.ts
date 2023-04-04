@@ -29,7 +29,6 @@ export default createStore({
     },
   },
   actions: {
-    // eslint-disable-next-line prettier/prettier
     setAccessKey({ commit }, { authKey: accessKey, time }: { authKey: string; time: number }) {
       commit("setLoggedIn", true);
       commit("setAccessKey", accessKey);

@@ -12,9 +12,9 @@ import LoginComponent from "@/components/LoginComponent.vue";
 export default defineComponent({
   name: "LoginVue",
   beforeRouteEnter(to, from, next) {
-    console.log(to);
-    console.log(from);
-    console.log(store.state.loggedIn);
+    // console.log(to);
+    // console.log(from);
+    // console.log(store.state.loggedIn);
     if (store.state.loggedIn) {
       next(false);
     } else {

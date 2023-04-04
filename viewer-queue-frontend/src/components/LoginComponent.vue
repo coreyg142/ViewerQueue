@@ -7,7 +7,7 @@
       autocomplete="off"
       v-model="password"
       placeholder="Access code"
-      v-on:keypress="submitOnEnter"
+      v-on:keypress.enter="submit"
     />
     <button v-on:click="submit">Submit</button>
     <Transition name="fade">
@@ -32,11 +32,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(["setAccessKey"]),
-    async submitOnEnter(event: KeyboardEvent) {
-      if (event.key === "Enter") {
-        await this.submit();
-      }
-    },
     async submit() {
       try {
         const response = await axios.post(`${this.apiUrl}/authenticate`, {
@@ -52,6 +47,9 @@ export default defineComponent({
         }
       } catch (error) {
         this.invalidCode = true;
+        setTimeout(() => {
+          this.invalidCode = false;
+        }, 5000);
         this.password = "";
       }
     },
@@ -63,9 +61,11 @@ export default defineComponent({
 .errortext {
   color: red;
 }
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active {
   transition: opacity 0.2s ease;
+}
+.fade-leave-active {
+  transition: opacity 0.8s ease;
 }
 
 .fade-enter-from,
