@@ -17,7 +17,7 @@ export default async function popName(req: Request, res: Response, io: Server) {
       res.status(400).json({ error: result.error });
       return;
     }
-    res.status(200).json({ result: result.result });
+    res.status(200).json({ result: result.result, name: result.name });
     io.emit("name-popped", result.name);
   } else {
     res.status(401).json({ error: "Unauthorized" });
