@@ -2,6 +2,7 @@ import { reactive } from "vue";
 import { io } from "socket.io-client";
 import axios from "axios";
 import { apiUrl } from "./main";
+import storeState from "./store";
 export const state = reactive({
   connected: false,
   queuedNames: [] as string[],
@@ -29,4 +30,26 @@ socket.on("connect", async () => {
   const response = await axios.get(apiUrl + "/queue");
   state.queuedNames = response.data.lists.queued;
   state.poppedNames = response.data.lists.popped;
+
+  const loggedIn = storeState.state.loggedIn;
+  if (loggedIn) {
+    try {
+      const response = await axios.get(`${apiUrl}/verifyauth`, {
+        headers: {
+          API_AUTH: `${storeState.state.accessKey}`,
+        },
+      });
+      if (response.status === 200) {
+        if (response.data.error) {
+          storeState.dispatch("clearAccessKey");
+        } else if (response.data.expiryTimeMs) {
+          setTimeout(() => {
+            storeState.dispatch("clearAccessKey");
+          }, response.data.expiryTimeMs);
+        }
+      }
+    } catch (e) {
+      storeState.dispatch("clearAccessKey");
+    }
+  }
 });

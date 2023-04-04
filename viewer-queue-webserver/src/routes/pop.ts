@@ -7,12 +7,11 @@ dotenv.config();
 
 export default async function popName(req: Request, res: Response, io: Server) {
   const method = req.method;
-  const key = method === "DELETE" ? req.headers?.key : req.query?.key;
+  const key = method === "DELETE" ? req.headers?.api_auth : req.query?.key;
   const random = req.query?.random === "true";
-  if (
-    (method === "GET" && key === process.env.WRITE_KEY) ||
-    (method === "DELETE" && typeof key === "string" && AuthKeyManager.verifyKey(key, req.ip))
-  ) {
+  const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
+
+  if ((method === "GET" && key === process.env.WRITE_KEY) || (method === "DELETE" && verified.valid)) {
     const result = await pop(random);
     if (result.error) {
       res.status(400).json({ error: result.error });

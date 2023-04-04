@@ -1,12 +1,6 @@
 import { createStore } from "vuex";
-import createPersistedState from "vuex-persistedstate";
 
-export default createStore({
-  plugins: [
-    createPersistedState({
-      paths: ["loggedIn", "accessKey", "logInTime", "queuedOrPrev"],
-    }),
-  ],
+const store = createStore({
   state: {
     loggedIn: false,
     accessKey: "",
@@ -46,3 +40,15 @@ export default createStore({
   },
   modules: {},
 });
+
+store.subscribe((mutation, state) => {
+  // Store the state object as a JSON string
+  localStorage.setItem("vuexStore", JSON.stringify(state));
+});
+
+if (localStorage.getItem("vuexStore")) {
+  // Replace the state object with the stored item
+  store.replaceState(Object.assign(store.state, JSON.parse(localStorage.getItem("vuexStore") || "{}")));
+}
+
+export default store;

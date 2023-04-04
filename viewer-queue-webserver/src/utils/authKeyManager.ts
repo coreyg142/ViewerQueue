@@ -1,7 +1,9 @@
 import crypto from "crypto";
-
+import dotenv from "dotenv";
+dotenv.config();
 const AUTH_KEY_LENGTH = 48;
-const AUTH_KEY_EXPIRATION_TIME = 1000 * 60 * 60 * 2; // 2 hours
+const AUTH_KEY_EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 hours;
+const NO_EXPIRY_KEY = process.env.PERMA_AUTH_KEY;
 export default class AuthKeyManager {
   static authKeysMap: Map<string, [string, number]> = new Map<string, [string, number]>();
 
@@ -13,21 +15,23 @@ export default class AuthKeyManager {
     return { authKey, time };
   }
 
-  static verifyKey(authKey: string, requestingIpAddr: string): boolean {
+  static verifyKey(authKey: string, requestingIpAddr: string): { valid: boolean; expiryTimeMs: number } {
     if (this.authKeysMap.has(authKey)) {
       const meta = this.authKeysMap.get(authKey);
       if (meta) {
         const [ipAddress, time] = meta;
 
         if (requestingIpAddr === ipAddress && time && Date.now() - time < AUTH_KEY_EXPIRATION_TIME) {
-          return true;
+          return { valid: true, expiryTimeMs: AUTH_KEY_EXPIRATION_TIME - (Date.now() - time) };
         } else {
           this.authKeysMap.delete(authKey);
-          return false;
+          return { valid: false, expiryTimeMs: -1 };
         }
       }
+    } else if (authKey === NO_EXPIRY_KEY) {
+      return { valid: true, expiryTimeMs: -1 };
     }
-    return false;
+    return { valid: false, expiryTimeMs: -1 };
   }
 
   constructor() {}
@@ -40,4 +44,4 @@ setInterval(() => {
       AuthKeyManager.authKeysMap.delete(key);
     }
   });
-}, AUTH_KEY_EXPIRATION_TIME);
+}, 1000 * 60 * 60 * 2);

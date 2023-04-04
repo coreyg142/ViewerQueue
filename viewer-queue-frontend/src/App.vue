@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <Transition name="fade">
-      <NavbarComponent v-if="mounted" />
+    <Transition name="fade" appear>
+      <NavbarComponent />
     </Transition>
     <RouterView v-slot="{ Component }">
-      <Transition name="fade">
+      <Transition name="fade" appear>
         <component :is="Component" />
       </Transition>
     </RouterView>
@@ -17,20 +17,11 @@ import { mapActions } from "vuex";
 import store from "./store";
 import NavbarComponent from "@/components/NavbarComponent.vue";
 
-// route to home on mount
 export default defineComponent({
   name: "App",
 
   components: {
     NavbarComponent,
-  },
-  mounted() {
-    this.mounted = true;
-  },
-  data() {
-    return {
-      mounted: false,
-    };
   },
   methods: {
     ...mapActions(["clearAccessKey"]),
@@ -99,7 +90,7 @@ body {
   color: #fff;
 }
 .fade-enter-active {
-  transition: opacity 0.6s ease;
+  transition: opacity 0.8s ease;
 }
 
 .fade-enter-from,

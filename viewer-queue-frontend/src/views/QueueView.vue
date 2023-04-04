@@ -54,8 +54,7 @@
       </div> -->
       <div class="listContainer">
         <Transition :name="listAnimationDirection">
-          <QueueComponent v-if="queuedOrPrev" />
-          <PoppedComponent v-else />
+          <component :is="dynamicComponent" />
         </Transition>
       </div>
     </div>
@@ -91,6 +90,10 @@ export default defineComponent({
     },
   },
   computed: {
+    dynamicComponent() {
+      if (this.queuedOrPrev) return QueueComponent;
+      return PoppedComponent;
+    },
     queuedOrPrev() {
       return store.state.queuedOrPrev;
     },
@@ -98,18 +101,18 @@ export default defineComponent({
       if (store.state.queuedOrPrev) return "slideXR";
       return "slideXL";
     },
-    listAnimationEnterClass() {
-      if (store.state.queuedOrPrev) {
-        return "animate__animated animate__fadeInLeft";
-      }
-      return "animate__animated animate__fadeInRight";
-    },
-    listAnimationLeaveClass() {
-      if (store.state.queuedOrPrev) {
-        return "animate__animated animate__fadeOutRight";
-      }
-      return "animate__animated animate__fadeOutLeft";
-    },
+    // listAnimationEnterClass() {
+    //   if (store.state.queuedOrPrev) {
+    //     return "animate__animated animate__fadeInLeft";
+    //   }
+    //   return "animate__animated animate__fadeInRight";
+    // },
+    // listAnimationLeaveClass() {
+    //   if (store.state.queuedOrPrev) {
+    //     return "animate__animated animate__fadeOutRight";
+    //   }
+    //   return "animate__animated animate__fadeOutLeft";
+    // },
     mostRecentNameMsg() {
       return socketState.poppedNames.length
         ? `The most recently chosen name is `
@@ -157,10 +160,6 @@ export default defineComponent({
   white-space: nowrap;
 }
 
-.faster {
-  --animate-duration: 0.5s;
-}
-
 .listContainer {
   width: fit-content;
   margin: 0 auto;
@@ -172,7 +171,10 @@ export default defineComponent({
 .slideXR-enter-active,
 .slideXL-enter-active,
 .slideXR-leave-active,
-.slideXL-leave-active {
+.slideXL-leave-active,
+.slideY-move,
+.slideY-enter-active,
+.slideY-leave-active {
   transition: all 0.6s ease;
 }
 
@@ -191,12 +193,6 @@ export default defineComponent({
   position: absolute;
   transition: none;
   opacity: 0;
-}
-
-.slideY-move,
-.slideY-enter-active,
-.slideY-leave-active {
-  transition: all 0.6s ease;
 }
 
 .slideY-enter-from {

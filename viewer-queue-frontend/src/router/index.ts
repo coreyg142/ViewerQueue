@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+// import QueueView from "../views/QueueView.vue";
+// import LoginView from "../views/LoginView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/", redirect: "/viewerqueue" },
@@ -6,6 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/viewerqueue",
     name: "Multilocke Queue",
     component: () => import("../views/QueueView.vue"),
+    // component: QueueView,
   },
   {
     path: "/login",
@@ -14,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import("../views/LoginView.vue"),
+    // component: LoginView,
   },
 ];
 

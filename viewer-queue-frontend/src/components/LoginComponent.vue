@@ -23,10 +23,10 @@ import axios from "axios";
 
 export default defineComponent({
   name: "LoginComponent",
+  inject: ["apiUrl"],
   data() {
     return {
       password: "",
-      apiUrl: this.$apiUrl,
       invalidCode: false,
     };
   },
