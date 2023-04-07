@@ -89,12 +89,16 @@ body {
   background-color: #33135c;
   color: #fff;
 }
-.fade-enter-active {
+.fade-enter-active,
+.fadewithexit-enter-active,
+.fadewithexit-leave-active {
   transition: opacity 0.8s ease;
 }
 
 .fade-enter-from,
-.fade-leave-to {
+.fadewithexit-enter-from,
+.fade-leave-to,
+.fadewithexit-leave-to {
   opacity: 0;
 }
 </style>

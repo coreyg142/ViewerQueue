@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
   },
 });
 app.use(express.urlencoded({ extended: true }));

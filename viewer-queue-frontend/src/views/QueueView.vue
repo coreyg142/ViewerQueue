@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <Transition name="fadewithexit">
+      <AddNameModal v-if="showAddModal" @close="closeModal" />
+    </Transition>
     <img
       rel="prefetch"
       class="rudeimg"
@@ -29,13 +32,25 @@
       <span
         role="button"
         tabindex="0"
-        class="prevBtn btn"
+        class="btn"
         v-on:click="togglePrev"
         v-on:keypress.enter="togglePrev"
         :class="{ btnActive: !queuedOrPrev }"
       >
         <span>Previous</span>
       </span>
+      <div v-if="loggedIn">
+        <br />
+        <span
+          role="button"
+          tabindex="0"
+          class="btn"
+          v-on:click="showAddModal = true"
+          v-on:keypress.enter="showAddModal = true"
+        >
+          <span>Add a name</span>
+        </span>
+      </div>
       <!-- <div class="recentPop">
       <h2>Most Recent Pop</h2>
       <p>{{ store.state.recentPop }}</p>
@@ -67,6 +82,7 @@ import { mapActions } from "vuex";
 import QueueComponent from "@/components/QueueComponent.vue";
 import PoppedComponent from "@/components/PoppedComponent.vue";
 import QueueItemComponent from "@/components/QueueItemComponent.vue";
+import AddNameModal from "@/components/AddNameModal.vue";
 import store from "@/store";
 import { state as socketState } from "@/socket";
 
@@ -78,10 +94,12 @@ export default defineComponent({
     QueueComponent,
     PoppedComponent,
     QueueItemComponent,
+    AddNameModal,
   },
   data() {
     return {
       animToggle: false,
+      showAddModal: false,
     };
   },
   watch: {
@@ -90,6 +108,9 @@ export default defineComponent({
     },
   },
   computed: {
+    loggedIn() {
+      return store.state.loggedIn;
+    },
     dynamicComponent() {
       if (this.queuedOrPrev) return QueueComponent;
       return PoppedComponent;
@@ -137,6 +158,9 @@ export default defineComponent({
     togglePrev() {
       this.setQueuedOrPrev(false);
     },
+    closeModal() {
+      this.showAddModal = false;
+    },
   },
 });
 </script>
@@ -148,7 +172,22 @@ export default defineComponent({
   object-fit: contain;
   padding-bottom: 0.5%;
   pointer-events: none;
+  /* display: inline-block; */
 }
+
+.addNameModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .mostRecentName {
   text-align: left;
   font-size: 1.5rem;
