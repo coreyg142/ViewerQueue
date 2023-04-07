@@ -43,19 +43,32 @@ export async function addName(name: string) {
 }
 
 export async function deleteName(name: string) {
-  if (!queuedNames.includes(name)) {
-    return { error: "That username is not in the queue" };
+  if (queuedNames.includes(name)) {
+    const idx = queuedNames.findIndex((s) => s === name);
+    const deleting = queuedNames.splice(idx, 1);
+    console.log(`Removing ${deleting} from the queue`);
+    try {
+      await docRef.update({ queuedNames });
+      io.emit("refresh-lists", queuedNames, poppedNames);
+      return { result: `Successfully removed ${name} from the queue` };
+    } catch (e) {
+      console.error(e);
+      return { error: "Something went wrong" };
+    }
+  } else if (poppedNames.includes(name)) {
+    const idx = poppedNames.findIndex((s) => s === name);
+    const deleting = poppedNames.splice(idx, 1);
+    console.log(`Removing ${deleting} from the queue`);
+    try {
+      await docRef.update({ poppedNames });
+      io.emit("refresh-lists", queuedNames, poppedNames);
+      return { result: `Successfully removed ${name} from the queue` };
+    } catch (e) {
+      console.error(e);
+      return { error: "Something went wrong" };
+    }
   }
-  const idx = queuedNames.findIndex((s) => s === name);
-  const deleting = queuedNames.splice(idx, 1);
-  console.log(`Removing ${deleting} from the queue`);
-  try {
-    await docRef.update({ queuedNames });
-    return { result: `Successfully removed ${name} from the queue` };
-  } catch (e) {
-    console.error(e);
-    return { error: "Something went wrong" };
-  }
+  return { error: "That username is not in the queue" };
 }
 
 export async function popName(random: boolean) {
@@ -77,6 +90,24 @@ export async function popName(random: boolean) {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
     // await docRef.update({ mostRecentPop: name });
+    return { result: `${name} is the next name!`, name };
+  } catch (e) {
+    console.error(e);
+    return { error: "Something went wrong getting the next name" };
+  }
+}
+
+export async function popSpecificName(name: string) {
+  if (!queuedNames.includes(name)) {
+    return { error: "That username is not in the queue" };
+  }
+  const idx = queuedNames.findIndex((s) => s === name);
+  queuedNames.splice(idx, 1);
+  poppedNames.unshift(name);
+  console.log(`Popping ${name} from the queue`);
+  try {
+    await docRef.update({ queuedNames });
+    await docRef.update({ poppedNames });
     return { result: `${name} is the next name!`, name };
   } catch (e) {
     console.error(e);

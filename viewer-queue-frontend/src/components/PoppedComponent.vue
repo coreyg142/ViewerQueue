@@ -4,7 +4,11 @@
     <div class="queue">
       <TransitionGroup name="list" tag="ol" reversed>
         <li v-for="item in queue" :key="item" class="list-item">
-          <QueueItemComponent :name="item" />
+          <QueueItemComponent
+            :name="item"
+            :showModTools="loggedIn"
+            :buttonsToShow="['del']"
+          />
         </li>
       </TransitionGroup>
       <Transition name="emptyMsg"
@@ -17,6 +21,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { state } from "@/socket";
+import store from "@/store";
 import QueueItemComponent from "./QueueItemComponent.vue";
 
 export default defineComponent({
@@ -28,6 +33,9 @@ export default defineComponent({
   computed: {
     queue() {
       return state.poppedNames;
+    },
+    loggedIn() {
+      return store.state.loggedIn;
     },
   },
 });

@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
-import { notFound, addName, popName, getQueue, authenticate, verifyAuth } from "./routes/index.js";
+import { notFound, addName, popName, getQueue, authenticate, verifyAuth, removeName } from "./routes/index.js";
 import { clearQueues } from "./utils/names.js";
 
 const app = express();
@@ -56,7 +56,7 @@ app.get("/pop", (req, res) => {
  * @api {patch} /pop?random=[true/false] Pull a name from the list
  * @apiName PopName
  * @apiGroup Name
- * 
+ *
  * @apiQuery {Boolean} random Pull randomly or in order
  * @apiHeader {String} api_auth Authentication key
  * @apiExample
@@ -64,7 +64,7 @@ app.get("/pop", (req, res) => {
  *  headers: {
  *      API_AUTH: "authkey",
  *  }
- * 
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -82,7 +82,7 @@ app.patch("/pop", (req, res) => {
  * @apiGroup Name
  * @apiExample
  * GET https://api.thatonelegion.xyz/queue
- * 
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -94,6 +94,10 @@ app.patch("/pop", (req, res) => {
  */
 app.get("/queue", (req, res) => {
   getQueue(req, res, io);
+});
+
+app.delete("/remove", (req, res) => {
+  removeName(req, res, io);
 });
 
 app.post("/authenticate", (req, res) => {

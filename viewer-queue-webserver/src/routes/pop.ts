@@ -1,18 +1,24 @@
 import dotenv from "dotenv";
 import { Request, Response } from "express";
 import { Server } from "socket.io";
-import { popName as pop } from "../utils/names.js";
+import { popName as pop, popSpecificName } from "../utils/names.js";
 import AuthKeyManager from "../utils/authKeyManager.js";
 dotenv.config();
 
 export default async function popName(req: Request, res: Response, io: Server) {
   const method = req.method;
   const key = method === "PATCH" ? req.headers?.api_auth : req.query?.key;
+  const name = req.body?.name;
   const random = req.query?.random === "true";
   const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
 
   if ((method === "GET" && key === process.env.WRITE_KEY) || (method === "PATCH" && verified.valid)) {
-    const result = await pop(random);
+    let result;
+    if (!name) {
+      result = await pop(random);
+    } else {
+      result = await popSpecificName(name);
+    }
     if (result.error) {
       res.status(400).json({ error: result.error });
       return;

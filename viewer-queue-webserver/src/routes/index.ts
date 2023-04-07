@@ -6,3 +6,4 @@ export { default as popName } from "./pop.js";
 export { default as getQueue } from "./queue.js";
 export { default as authenticate } from "./authenticate.js";
 export { default as verifyAuth } from "./verifyauth.js";
+export { default as removeName } from "./remove.js";
