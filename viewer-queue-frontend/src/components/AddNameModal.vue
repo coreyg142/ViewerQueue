@@ -21,7 +21,7 @@ export default defineComponent({
   inject: ["apiUrl"],
 
   mounted() {
-    this.closeHandler = (e) => {
+    this.closeHandler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         this.closeModal();
       }
