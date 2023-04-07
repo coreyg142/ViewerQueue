@@ -22,6 +22,28 @@ app.get("/add", (req, res) => {
   addName(req, res, io);
 });
 
+/**
+ * @api {post} /add Add a user to the list
+ * @apiName AddUser
+ * @apiGroup Name
+
+ * @apiBody {Number} name The name to add
+ * @apiHeader {String} api_auth Authentication key
+ * @apiExample
+ * POST https://api.thatonelegion.xyz/add
+ *  headers: {
+ *      API_AUTH: "authkey",
+ *  },
+ *  body: {
+ *      name: "name"
+ *  }
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "result": "Successfully added to the queue at position ${queuedNames.length}"
+ *     }
+ */
 app.post("/add", (req, res) => {
   addName(req, res, io);
 });
@@ -29,10 +51,47 @@ app.post("/add", (req, res) => {
 app.get("/pop", (req, res) => {
   popName(req, res, io);
 });
-app.delete("/pop", (req, res) => {
+
+/**
+ * @api {patch} /pop?random=[true/false] Pull a name from the list
+ * @apiName PopName
+ * @apiGroup Name
+ * 
+ * @apiQuery {Boolean} random Pull randomly or in order
+ * @apiHeader {String} api_auth Authentication key
+ * @apiExample
+ * PATCH https://api.thatonelegion.xyz/pop?random=true
+ *  headers: {
+ *      API_AUTH: "authkey",
+ *  }
+ * 
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "result": "${name} is the next name!",
+ *        "name": "${name}"
+ *     }
+ */
+app.patch("/pop", (req, res) => {
   popName(req, res, io);
 });
 
+/**
+ * @api {get} /queue Get the lists of queued and previously popped names
+ * @apiName GetQueue
+ * @apiGroup Name
+ * @apiExample
+ * GET https://api.thatonelegion.xyz/queue
+ * 
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "lists" = {
+ *          queued[],
+ *          popped[],
+ *        }
+ *     }
+ */
 app.get("/queue", (req, res) => {
   getQueue(req, res, io);
 });

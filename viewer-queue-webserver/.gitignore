@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /dist
-
+/doc
+apidoc.json
 
 # local env files
 .env.local
