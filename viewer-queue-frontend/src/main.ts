@@ -4,7 +4,8 @@ import router from "./router";
 import store from "./store";
 
 const app = createApp(App);
-export const apiUrl = process.env.VUE_APP_API_URL || "";
+// TODO Update this:
+export const apiUrl = process.env.NODE_ENV === "production" ? "http://localhost:3000" : "http://localhost:3000";
 console.log(apiUrl);
 app.provide("apiUrl", apiUrl);
 app.use(store).use(router).mount("#app");
