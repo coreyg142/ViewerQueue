@@ -6,6 +6,7 @@
       v-model="name"
       placeholder="Enter a name"
       v-on:keypress.enter="tryAddName"
+      ref="nameInput"
     />
     <button class="button-56" role="button" v-on:click="tryAddName">Add</button>
   </div>
@@ -27,6 +28,10 @@ export default defineComponent({
       }
     };
     document.addEventListener("keydown", this.closeHandler);
+    this.$nextTick(() => {
+      const input = this.$refs.nameInput as HTMLInputElement;
+      input.focus();
+    });
   },
 
   beforeUnmount() {
