@@ -2,8 +2,8 @@ import { Server } from "socket.io";
 import { db } from "./db.js";
 import { io } from "../webserver.js";
 console.log("Running db query");
-
-const docRef = db.collection("ViewerQueue").doc("namesLists");
+const doc = process.env.DEV ? "namesListsDev" : "namesLists";
+const docRef = db.collection("ViewerQueue").doc(doc);
 const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;

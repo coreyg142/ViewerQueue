@@ -7,7 +7,7 @@
       placeholder="Enter a name"
       v-on:keypress.enter="tryAddName"
     />
-    <button v-on:click="tryAddName">Add</button>
+    <button class="button-56" role="button" v-on:click="tryAddName">Add</button>
   </div>
 </template>
 
@@ -69,7 +69,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style scoped lang="scss">
 .background {
   position: absolute;
   top: 0;
@@ -78,5 +78,57 @@ export default defineComponent({
   height: 100%;
   z-index: -1;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+input[type="text"] {
+  width: 24rem;
+  height: 3rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  margin-right: 0.5rem;
+  font-size: 30px;
+  font-family: inherit;
+}
+
+button {
+  background: #ff4365;
+  color: #fff;
+  border: none;
+  position: relative;
+  height: 3.5rem;
+  font-size: 1.2em;
+  padding: 0 1em;
+  cursor: pointer;
+  transition: 800ms ease all;
+  outline: none;
+  border-radius: 5%;
+  font-family: inherit;
+}
+button:hover {
+  background: #ffb2c0;
+  color: #ff4365;
+}
+button:before,
+button:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: #ff4365;
+  transition: 400ms ease all;
+}
+button:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+button:hover:before,
+button:hover:after {
+  width: 100%;
+  transition: 800ms ease all;
 }
 </style>
