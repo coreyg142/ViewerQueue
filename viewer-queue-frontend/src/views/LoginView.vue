@@ -8,6 +8,7 @@
 import { defineComponent } from "vue";
 import store from "@/store";
 import LoginComponent from "@/components/LoginComponent.vue";
+import router from "@/router";
 
 export default defineComponent({
   name: "LoginVue",
@@ -17,6 +18,8 @@ export default defineComponent({
     // console.log(store.state.loggedIn);
     if (store.state.loggedIn) {
       next(false);
+      router.push("/viewerqueue");
+      return false;
     } else {
       next();
     }

@@ -19,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/LoginView.vue"),
     // component: LoginView,
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "404",
+    component: () => import("../views/NotFoundView.vue"),
+  },
 ];
 
 const router = createRouter({

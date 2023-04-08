@@ -43,7 +43,7 @@ export default defineComponent({
   methods: {
     async popName() {
       try {
-        const response = await axios.patch(
+        await axios.patch(
           `${this.apiUrl}/pop`,
           {
             name: this.name,
@@ -60,7 +60,7 @@ export default defineComponent({
     },
     async removeName() {
       try {
-        const response = await axios.delete(`${this.apiUrl}/remove`, {
+        await axios.delete(`${this.apiUrl}/remove`, {
           headers: {
             API_AUTH: `${store.state.accessKey}`,
           },
