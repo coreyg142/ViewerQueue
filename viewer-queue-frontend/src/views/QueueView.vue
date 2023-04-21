@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-show="imageLoaded">
     <Transition name="fadewithexit">
       <AddNameModal v-if="showAddModal" @close="closeModal" />
     </Transition>
@@ -8,6 +8,7 @@
       class="rudeimg"
       alt="Multilocke Name Queue"
       src="../assets/multilockeheader-transparent.png"
+      @load="imageLoaded = true"
     />
     <br />
     <div class="queueContainer">
@@ -100,6 +101,7 @@ export default defineComponent({
     return {
       animToggle: false,
       showAddModal: false,
+      imageLoaded: false,
     };
   },
   watch: {
