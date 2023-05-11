@@ -19,9 +19,9 @@ app.use(cors());
 const port = process.env.PORT || 3000;
 
 app.get("/add", (req, res) => {
-  console.log("GET /add");
+  console.log("/add");
   console.log(req.method);
-  console.log(req.headers);
+  // console.log(req.headers);
   console.log(req.body);
   addName(req, res, io);
 });
@@ -49,17 +49,17 @@ app.get("/add", (req, res) => {
  *     }
  */
 app.post("/add", (req, res) => {
-  console.log("POST /add");
+  console.log("/add");
   console.log(req.method);
-  console.log(req.headers);
+  // console.log(req.headers);
   console.log(req.body);
   addName(req, res, io);
 });
 
 app.get("/pop", (req, res) => {
-  console.log("GET /pop");
+  console.log("/pop");
   console.log(req.method);
-  console.log(req.headers);
+  // console.log(req.headers);
   console.log(req.body);
   popName(req, res, io);
 });
@@ -85,9 +85,9 @@ app.get("/pop", (req, res) => {
  *     }
  */
 app.patch("/pop", (req, res) => {
-  console.log("PATCH /pop");
+  console.log("/pop");
   console.log(req.method);
-  console.log(req.headers);
+  // console.log(req.headers);
   console.log(req.body);
   popName(req, res, io);
 });
@@ -115,7 +115,7 @@ app.get("/queue", (req, res) => {
 app.delete("/remove", (req, res) => {
   console.log("/remove");
   console.log(req.method);
-  console.log(req.headers);
+  // console.log(req.headers);
   console.log(req.body);
   removeName(req, res, io);
 });
