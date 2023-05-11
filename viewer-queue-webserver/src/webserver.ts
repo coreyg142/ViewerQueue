@@ -84,8 +84,8 @@ app.get("/pop", (req, res) => {
  *        "name": "${name}"
  *     }
  */
-app.patch("PATCH /pop", (req, res) => {
-  console.log("/pop");
+app.patch("/pop", (req, res) => {
+  console.log("PATCH /pop");
   console.log(req.method);
   console.log(req.headers);
   console.log(req.body);
@@ -109,10 +109,6 @@ app.patch("PATCH /pop", (req, res) => {
  *     }
  */
 app.get("/queue", (req, res) => {
-  console.log("/queue");
-  console.log(req.method);
-  console.log(req.headers);
-  console.log(req.body);
   getQueue(req, res, io);
 });
 
@@ -125,18 +121,10 @@ app.delete("/remove", (req, res) => {
 });
 
 app.post("/authenticate", (req, res) => {
-  console.log("/authenticate");
-  console.log(req.method);
-  console.log(req.headers);
-  console.log(req.body);
   authenticate(req, res);
 });
 
 app.get("/verifyauth", (req, res) => {
-  console.log("/verifyauth");
-  console.log(req.method);
-  console.log(req.headers);
-  console.log(req.body);
   verifyAuth(req, res);
 });
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -144,10 +132,6 @@ app.get("/verifyauth", (req, res) => {
  * Below section for development purposes only. Remove for production.
  */
 app.delete("/clearqueues", (req, res) => {
-  console.log("/clearqueues");
-  console.log(req.method);
-  console.log(req.headers);
-  console.log(req.body);
   const key = req.headers?.api_auth;
   if (key !== process.env.PERMA_AUTH_KEY) {
     res.status(401).json({ error: "Unauthorized" });
