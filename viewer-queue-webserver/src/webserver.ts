@@ -139,8 +139,8 @@ app.get("/verifyauth", (req, res) => {
 /**
  * Below section for development purposes only. Remove for production.
  */
-app.delete("/clearqueues", (req, res) => {
-  console.log("/clearqueues");
+app.delete("/lists", (req, res) => {
+  console.log("/lists");
   console.log(req.method);
   // console.log(req.headers);
   console.log(req.body);
