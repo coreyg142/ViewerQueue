@@ -1,6 +1,6 @@
 <template>
   <div class="queuebox">
-    <h2>Queued names</h2>
+    <h2>Pooled names</h2>
     <div class="queue">
       <TransitionGroup name="list" tag="ul">
         <li v-for="item in queue" :key="item" class="list-item">
@@ -12,7 +12,7 @@
         </li>
       </TransitionGroup>
       <Transition name="emptyMsg"
-        ><p v-if="queue.length === 0" class="empty">The queue is empty.</p>
+        ><p v-if="queue.length === 0" class="empty">The pool is empty.</p>
       </Transition>
     </div>
   </div>

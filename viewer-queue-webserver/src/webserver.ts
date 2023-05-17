@@ -2,8 +2,16 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
-import { notFound, addName, popName, getQueue, authenticate, verifyAuth, removeName } from "./routes/index.js";
-import { clearQueues } from "./utils/names.js";
+import {
+  notFound,
+  addName,
+  popName,
+  getQueue,
+  authenticate,
+  verifyAuth,
+  removeName,
+  clearQueues,
+} from "./routes/index.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -132,13 +140,11 @@ app.get("/verifyauth", (req, res) => {
  * Below section for development purposes only. Remove for production.
  */
 app.delete("/clearqueues", (req, res) => {
-  const key = req.headers?.api_auth;
-  if (key !== process.env.PERMA_AUTH_KEY) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  clearQueues();
-  res.status(200).json({ message: "queues cleared" });
+  console.log("/clearqueues");
+  console.log(req.method);
+  // console.log(req.headers);
+  console.log(req.body);
+  clearQueues(req, res);
 });
 
 app.get("*", (req, res) => {

@@ -126,9 +126,12 @@ export async function reOrderName(name: string, newIdx: number) {
   // TODO: update DB
 }
 
-export async function clearQueues() {
-  queuedNames = [];
-  poppedNames = [];
+export async function clearQueues(filter: string) {
+  const clearPool = filter === "all" || filter === "pool";
+  const clearPopped = filter === "all" || filter === "prev";
+
+  if (clearPool) queuedNames = [];
+  if (clearPopped) poppedNames = [];
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });

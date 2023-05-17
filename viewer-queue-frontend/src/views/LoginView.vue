@@ -18,7 +18,7 @@ export default defineComponent({
     // console.log(store.state.loggedIn);
     if (store.state.loggedIn) {
       next(false);
-      router.push("/viewerqueue");
+      router.push("/");
       return false;
     } else {
       next();

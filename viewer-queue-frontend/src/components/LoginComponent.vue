@@ -43,7 +43,7 @@ export default defineComponent({
             authKey: response.data.authKey,
             time: response.data.time,
           });
-          this.$router.push("/viewerqueue");
+          this.$router.push("/");
         }
       } catch (error) {
         this.invalidCode = true;

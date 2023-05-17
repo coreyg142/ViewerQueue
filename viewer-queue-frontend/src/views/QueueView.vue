@@ -6,7 +6,7 @@
     <img
       rel="prefetch"
       class="rudeimg"
-      alt="Multilocke Name Queue"
+      alt="Multilocke Name Pool"
       src="../assets/multilockeheader-transparent.png"
       @load="imageLoaded = true"
     />
@@ -27,7 +27,7 @@
         v-on:keypress.enter="toggleQueue"
         :class="{ btnActive: queuedOrPrev }"
       >
-        <span>Queued</span>
+        <span>Pooled</span>
       </span>
       <span> | </span>
       <span

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <nav>
-      <router-link to="/viewerqueue" tabindex="0">Queue</router-link> |
+      <router-link to="/" tabindex="0">Name Pool</router-link> |
       <router-link v-if="!loggedIn" to="/login" tabindex="0">
         Access moderator controls
       </router-link>

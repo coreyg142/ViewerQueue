@@ -3,10 +3,9 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 // import LoginView from "../views/LoginView.vue";
 
 const routes: Array<RouteRecordRaw> = [
-  { path: "/", redirect: "/viewerqueue" },
   {
-    path: "/viewerqueue",
-    name: "Multilocke Queue",
+    path: "/",
+    name: "Multilocke Pool",
     component: () => import("../views/QueueView.vue"),
     // component: QueueView,
   },
