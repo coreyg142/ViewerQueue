@@ -6,8 +6,9 @@ import { Request, Response } from "express";
 
 export default async function authenticate(req: Request, res: Response) {
   const password: string = req.body?.password;
-  if (password === process.env.MOD_KEY) {
-    const { authKey, time } = AuthKeyManager.genAuthKey(req.ip);
+  const ip = req.headers?.["cf-connecting-ip"] || req.socket.remoteAddress;
+  if (password === process.env.MOD_KEY && typeof ip === "string") {
+    const { authKey, time } = AuthKeyManager.genAuthKey(ip);
 
     res.status(200).json({ authKey, time });
   } else {
