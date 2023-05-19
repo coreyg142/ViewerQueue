@@ -26,13 +26,13 @@ app.use(cors());
 // app.set("trust proxy", true);
 const port = process.env.PORT || 3000;
 
-app.get("/add", (req, res) => {
-  console.log("/add");
-  console.log(req.method);
-  // console.log(req.headers);
-  console.log(req.body);
-  addName(req, res, io);
-});
+// app.get("/add", (req, res) => {
+//   console.log("/add");
+//   console.log(req.method);
+//   // console.log(req.headers);
+//   console.log(req.body);
+//   addName(req, res, io);
+// });
 
 /**
  * @api {post} /add Add a user to the list
@@ -64,13 +64,13 @@ app.post("/add", (req, res) => {
   addName(req, res, io);
 });
 
-app.get("/pop", (req, res) => {
-  console.log("/pop");
-  console.log(req.method);
-  // console.log(req.headers);
-  console.log(req.body);
-  popName(req, res, io);
-});
+// app.get("/pop", (req, res) => {
+//   console.log("/pop");
+//   console.log(req.method);
+//   // console.log(req.headers);
+//   console.log(req.body);
+//   popName(req, res, io);
+// });
 
 /**
  * @api {patch} /pop?random=[true/false] Pull a name from the list
