@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 
 export default async function verifyAuth(req: Request, res: Response) {
   const key = req.headers?.api_auth;
-  console.log(key);
+  console.log(req.headers);
   const verified =
     typeof key === "string"
       ? AuthKeyManager.verifyKey(key, req.ip)
