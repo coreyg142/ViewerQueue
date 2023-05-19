@@ -133,6 +133,8 @@ app.post("/authenticate", (req, res) => {
 });
 
 app.get("/verifyauth", (req, res) => {
+  console.log("/verifyauth");
+  console.log(req.method);
   verifyAuth(req, res);
 });
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
