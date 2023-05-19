@@ -10,7 +10,9 @@ export default async function popName(req: Request, res: Response, io: Server) {
   const key = method === "PATCH" ? req.headers?.api_auth : req.query?.key;
   const name = req.body?.name;
   const random = req.query?.random === "true";
-  const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
+  const ip = req.headers?.["cf-connecting-ip"] || req.socket.remoteAddress;
+  const verified =
+    typeof key === "string" && typeof ip === "string" ? AuthKeyManager.verifyKey(key, ip) : { valid: false };
 
   if ((method === "GET" && key === process.env.WRITE_KEY) || (method === "PATCH" && verified.valid)) {
     let result;

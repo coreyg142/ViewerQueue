@@ -10,7 +10,9 @@ export default async function addName(req: Request, res: Response, io: Server) {
   const method: string = req.method;
   const name = method === "POST" ? req.body?.name : req.query?.name;
   const key = method === "POST" ? req.headers?.api_auth : req.query?.key;
-  const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
+  const ip = req.headers?.["cf-connecting-ip"] || req.socket.remoteAddress;
+  const verified =
+    typeof key === "string" && typeof ip === "string" ? AuthKeyManager.verifyKey(key, ip) : { valid: false };
 
   if ((method === "GET" && key === process.env.WRITE_KEY) || (method === "POST" && verified.valid)) {
     if (!name) {

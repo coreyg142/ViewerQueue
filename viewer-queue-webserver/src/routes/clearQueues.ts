@@ -6,8 +6,10 @@ dotenv.config();
 
 export default async function clearQueues(req: Request, res: Response) {
   const key = req.headers?.api_auth;
-  console.log(key);
-  const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
+  // console.log(key);
+  const ip = req.headers?.["cf-connecting-ip"] || req.socket.remoteAddress;
+  const verified =
+    typeof key === "string" && typeof ip === "string" ? AuthKeyManager.verifyKey(key, ip) : { valid: false };
   console.log(verified);
   if (!verified.valid) {
     res.status(401).json({ error: "Unauthorized" });

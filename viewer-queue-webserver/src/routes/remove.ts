@@ -10,7 +10,9 @@ export default async function remove(req: Request, res: Response, io: Server) {
   //   const method: string = req.method;
   const name = req.body?.name;
   const key = req.headers?.api_auth;
-  const verified = typeof key === "string" ? AuthKeyManager.verifyKey(key, req.ip) : { valid: false };
+  const ip = req.headers?.["cf-connecting-ip"] || req.socket.remoteAddress;
+  const verified =
+    typeof key === "string" && typeof ip === "string" ? AuthKeyManager.verifyKey(key, ip) : { valid: false };
 
   if (verified.valid) {
     if (!name) {
