@@ -16,21 +16,29 @@ export default class AuthKeyManager {
   }
 
   static verifyKey(authKey: string, requestingIpAddr: string): { valid: boolean; expiryTimeMs: number } {
+    console.log(`Verify key for ${requestingIpAddr}`);
     if (this.authKeysMap.has(authKey)) {
+      console.log(`Found auth key ${authKey}`);
       const meta = this.authKeysMap.get(authKey);
       if (meta) {
         const [ipAddress, time] = meta;
+        console.log(`ipAddress: ${ipAddress}, time: ${time}`);
+        console.log(`requestingIpAddr: ${requestingIpAddr}`);
 
         if (requestingIpAddr === ipAddress && time && Date.now() - time < AUTH_KEY_EXPIRATION_TIME) {
+          console.log(`Auth key is valid`);
           return { valid: true, expiryTimeMs: AUTH_KEY_EXPIRATION_TIME - (Date.now() - time) };
         } else {
+          console.log(`Auth key is invalid (expired)`);
           this.authKeysMap.delete(authKey);
           return { valid: false, expiryTimeMs: -1 };
         }
       }
     } else if (authKey === NO_EXPIRY_KEY) {
+      console.log(`Auth key is valid`);
       return { valid: true, expiryTimeMs: -1 };
     }
+    console.log(`Auth key is invalid (not found)`);
     return { valid: false, expiryTimeMs: -1 };
   }
 
