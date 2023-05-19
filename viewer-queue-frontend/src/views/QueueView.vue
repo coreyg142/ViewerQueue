@@ -52,22 +52,6 @@
           <span>Add a name</span>
         </span>
       </div>
-      <!-- <div class="recentPop">
-      <h2>Most Recent Pop</h2>
-      <p>{{ store.state.recentPop }}</p>
-    </div> -->
-      <!-- <div class="listContainer">
-        <Transition
-          name="customclasses"
-          :enter-active-class="listAnimationEnterClass"
-          :leave-active-class="listAnimationLeaveClass"
-          mode="out-in"
-          class="faster"
-        >
-          <QueueComponent v-if="queuedOrPrev" />
-          <PoppedComponent v-else />
-        </Transition>
-      </div> -->
       <div class="listContainer">
         <Transition :name="listAnimationDirection">
           <component :is="dynamicComponent" />
@@ -124,18 +108,6 @@ export default defineComponent({
       if (store.state.queuedOrPrev) return "slideXR";
       return "slideXL";
     },
-    // listAnimationEnterClass() {
-    //   if (store.state.queuedOrPrev) {
-    //     return "animate__animated animate__fadeInLeft";
-    //   }
-    //   return "animate__animated animate__fadeInRight";
-    // },
-    // listAnimationLeaveClass() {
-    //   if (store.state.queuedOrPrev) {
-    //     return "animate__animated animate__fadeOutRight";
-    //   }
-    //   return "animate__animated animate__fadeOutLeft";
-    // },
     mostRecentNameMsg() {
       return socketState.poppedNames.length
         ? `The most recently chosen name is `
