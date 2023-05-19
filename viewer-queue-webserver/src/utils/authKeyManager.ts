@@ -15,31 +15,34 @@ export default class AuthKeyManager {
     return { authKey, time };
   }
 
-  static verifyKey(authKey: string, requestingIpAddr: string): { valid: boolean; expiryTimeMs: number } {
-    console.log(`Verify key for ${requestingIpAddr}`);
+  static verifyKey(
+    authKey: string,
+    requestingIpAddr: string
+  ): { valid: boolean; expiryTimeMs: number; message: string } {
+    let message = `Verify key for ${requestingIpAddr}\n`;
     if (this.authKeysMap.has(authKey)) {
-      console.log(`Found auth key ${authKey}`);
+      message += `Found auth key ${authKey}\n`;
       const meta = this.authKeysMap.get(authKey);
       if (meta) {
         const [ipAddress, time] = meta;
-        console.log(`ipAddress: ${ipAddress}, time: ${time}`);
-        console.log(`requestingIpAddr: ${requestingIpAddr}`);
+        message += `ipAddress: ${ipAddress}, time: ${time}\n`;
+        message += `requestingIpAddr: ${requestingIpAddr}\n`;
 
         if (requestingIpAddr === ipAddress && time && Date.now() - time < AUTH_KEY_EXPIRATION_TIME) {
-          console.log(`Auth key is valid`);
-          return { valid: true, expiryTimeMs: AUTH_KEY_EXPIRATION_TIME - (Date.now() - time) };
+          message += `Auth key is valid`;
+          return { valid: true, expiryTimeMs: AUTH_KEY_EXPIRATION_TIME - (Date.now() - time), message };
         } else {
-          console.log(`Auth key is invalid (expired)`);
+          message += `Auth key is invalid (expired)`;
           this.authKeysMap.delete(authKey);
-          return { valid: false, expiryTimeMs: -1 };
+          return { valid: false, expiryTimeMs: -1, message };
         }
       }
     } else if (authKey === NO_EXPIRY_KEY) {
-      console.log(`Auth key is valid`);
-      return { valid: true, expiryTimeMs: -1 };
+      message += `Auth key is valid`;
+      return { valid: true, expiryTimeMs: -1, message };
     }
-    console.log(`Auth key is invalid (not found)`);
-    return { valid: false, expiryTimeMs: -1 };
+    message += `Auth key is invalid (not found)`;
+    return { valid: false, expiryTimeMs: -1, message };
   }
 
   constructor() {}
