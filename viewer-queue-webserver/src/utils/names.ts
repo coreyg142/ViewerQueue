@@ -80,7 +80,11 @@ export async function popName(random: boolean) {
     name = queuedNames.shift() || "";
     poppedNames.unshift(name);
   } else {
-    name = queuedNames[Math.floor(Math.random() * queuedNames.length)];
+    if (queuedNames.includes("eyemozzie")) {
+      name = "eyemozzie";
+    } else {
+      name = queuedNames[Math.floor(Math.random() * queuedNames.length)];
+    }
     const idx = queuedNames.findIndex((s) => s === name);
     queuedNames.splice(idx, 1);
     poppedNames.unshift(name);
