@@ -34,7 +34,7 @@ export async function addName(name: string) {
   try {
     await docRef.update({ queuedNames });
     return {
-      result: `Successfully added to the pool at position ${queuedNames.length}`,
+      result: `Successfully added to the pool!`,
     };
   } catch (e) {
     console.error(e);
