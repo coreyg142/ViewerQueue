@@ -17,7 +17,7 @@ export async function addName(name: string) {
     const testNames = ["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"];
     queuedNames = testNames;
     await docRef.update({ queuedNames });
-    io.emit("refresh-lists", queuedNames, poppedNames);
+    io.emit("refresh-lists", queuedNames, poppedNames, nameGraveyard);
     return { result: "Successfully added test names to the pool" };
   }
   name = name.trim();
@@ -53,7 +53,7 @@ export async function deleteName(name: string) {
     console.log(`Removing ${deleting} from the pool`);
     try {
       await docRef.update({ queuedNames });
-      io.emit("refresh-lists", queuedNames, poppedNames);
+      io.emit("refresh-lists", queuedNames, poppedNames, nameGraveyard);
       return { result: `Successfully removed ${name} from the pool` };
     } catch (e) {
       console.error(e);
@@ -65,7 +65,7 @@ export async function deleteName(name: string) {
     console.log(`Removing ${deleting} from the pool`);
     try {
       await docRef.update({ poppedNames });
-      io.emit("refresh-lists", queuedNames, poppedNames);
+      io.emit("refresh-lists", queuedNames, poppedNames, nameGraveyard);
       return { result: `Successfully removed ${name} from the pool` };
     } catch (e) {
       console.error(e);

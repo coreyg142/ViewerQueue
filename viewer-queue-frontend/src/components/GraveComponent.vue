@@ -1,19 +1,20 @@
 <template>
   <div class="queuebox">
-    <h2>Names in current run</h2>
+    <h2>Murdered Pokemons</h2>
     <div class="queue">
       <TransitionGroup name="list" tag="ol" reversed>
-        <li v-for="item in queue" :key="item" class="list-item">
+        <li v-for="(key, val) in queue" :key="key" class="list-item">
           <QueueItemComponent
-            :name="item"
+            :name="val"
             :showModTools="loggedIn"
             :buttonsToShow="['del']"
-            :killed="isDeadInCurrentRun(item)"
           />
         </li>
       </TransitionGroup>
       <Transition name="emptyMsg"
-        ><p v-if="queue.length === 0" class="empty">The list is empty.</p>
+        ><p v-if="Object.keys(queue).length === 0" class="empty">
+          The graveyard is empty.
+        </p>
       </Transition>
     </div>
   </div>
@@ -26,24 +27,17 @@ import store from "@/store";
 import QueueItemComponent from "./QueueItemComponent.vue";
 
 export default defineComponent({
-  name: "QueueComponent",
+  name: "GraveComponent",
 
   components: {
     QueueItemComponent,
   },
   computed: {
     queue() {
-      return state.poppedNames;
+      return state.graveyard;
     },
     loggedIn() {
       return store.state.loggedIn;
-    },
-  },
-  methods: {
-    isDeadInCurrentRun(name: string) {
-      return (
-        Object.keys(state.graveyard).includes(name) && state.graveyard[name]
-      );
     },
   },
 });
