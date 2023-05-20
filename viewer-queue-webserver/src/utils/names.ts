@@ -75,17 +75,19 @@ export async function popName(random: boolean) {
   if (queuedNames.length === 0) {
     return { error: "There are no names in the pool" };
   }
-  let name = "";
+  let name: string = "";
   if (!random) {
     name = queuedNames.shift() || "";
     poppedNames.unshift(name);
   } else {
+    let idx: number = -1;
     // if (queuedNames.includes("eyemozzie")) {
     //   name = "eyemozzie";
+    //   idx = queuedNames.findIndex((s) => s === name);
     // } else {
-    name = queuedNames[Math.floor(Math.random() * queuedNames.length)];
+    idx = Math.floor(Math.random() * queuedNames.length);
+    name = queuedNames[idx];
     // }
-    const idx = queuedNames.findIndex((s) => s === name);
     queuedNames.splice(idx, 1);
     poppedNames.unshift(name);
   }
@@ -93,7 +95,6 @@ export async function popName(random: boolean) {
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
-    // await docRef.update({ mostRecentPop: name });
     return { result: `${name} is the next name!`, name };
   } catch (e) {
     console.error(e);
