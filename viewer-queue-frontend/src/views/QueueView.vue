@@ -38,7 +38,7 @@
         v-on:keypress.enter="togglePrev"
         :class="{ btnActive: !queuedOrPrev }"
       >
-        <span>Previous</span>
+        <span>Current run</span>
       </span>
       <div v-if="loggedIn">
         <br />
