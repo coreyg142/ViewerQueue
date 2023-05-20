@@ -7,6 +7,8 @@ const docRef = db.collection("ViewerQueue").doc(doc);
 const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
+export let persistentList: Array<string> = document?.data()?.persistentList;
+export let nameGraveyard: Map<string, boolean> = document?.data()?.nameGraveyard;
 // export let mostRecentPop: string = document?.data()?.mostRecentPop;
 
 export async function addName(name: string) {
@@ -30,9 +32,11 @@ export async function addName(name: string) {
   }
 
   queuedNames.push(name);
+  if (!persistentList.includes(name)) persistentList.push(name);
   console.log(`Adding ${name} to the pool at position ${queuedNames.length}`);
   try {
     await docRef.update({ queuedNames });
+    await docRef.update({ persistentList });
     return {
       result: `Successfully added to the pool!`,
     };
@@ -102,6 +106,21 @@ export async function popName(random: boolean) {
   }
 }
 
+export async function killName(name: string) {
+  if (!poppedNames.includes(name)) {
+    return { error: "The specified name has not been picked." };
+  }
+  const idx = poppedNames.findIndex((s) => s === name);
+  nameGraveyard.set(name, true);
+  try {
+    await docRef.update({ nameGraveyard });
+    return { result: `${name} is dead, RIP.`, name };
+  } catch (e) {
+    console.error(e);
+    return { error: `Something went wrong killing ${name}` };
+  }
+}
+
 export async function popSpecificName(name: string) {
   if (!queuedNames.includes(name)) {
     return { error: "That username is not in the pool" };
@@ -137,11 +156,16 @@ export async function clearQueues(filter: string) {
 
   if (clearPool) queuedNames = [];
   if (clearPopped) poppedNames = [];
+
+  for (const name of nameGraveyard.keys()) {
+    nameGraveyard.set(name, false);
+  }
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
+    await docRef.update({ nameGraveyard });
     // await docRef.update({ mostRecentPop: "" });
-    io.emit("refresh-lists", queuedNames, poppedNames);
+    io.emit("refresh-lists", queuedNames, poppedNames, nameGraveyard);
     return { result: "Successfully cleared pools" };
   } catch (e) {
     console.error(e);
@@ -152,5 +176,8 @@ export async function clearQueues(filter: string) {
 export async function forceSync() {
   const document = await docRef.get();
   queuedNames = document?.data()?.queuedNames;
+  poppedNames = document?.data()?.poppedNames;
+  nameGraveyard = document?.data()?.nameGraveyard;
+  persistentList = document?.data()?.persistentList;
   return true;
 }
