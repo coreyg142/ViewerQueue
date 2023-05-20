@@ -1,4 +1,3 @@
-import { Server } from "socket.io";
 import { db } from "./db.js";
 import { io } from "../webserver.js";
 console.log("Running db query");
