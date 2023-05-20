@@ -16,25 +16,25 @@ export async function addName(name: string) {
     queuedNames = testNames;
     await docRef.update({ queuedNames });
     io.emit("refresh-lists", queuedNames, poppedNames);
-    return { result: "Successfully added test names to the queue" };
+    return { result: "Successfully added test names to the pool" };
   }
   name = name.trim();
   // convert queuedNames to all lowercase
   const lowercaseQN = queuedNames.map((s) => s.toLowerCase());
   const lowercasePN = poppedNames.map((s) => s.toLowerCase());
   if (lowercaseQN.includes(name.toLowerCase())) {
-    return { error: "You are already in the queue!" };
+    return { error: "You are already in the pool!" };
   }
   if (lowercasePN.includes(name.toLowerCase())) {
     return { error: "You have already been chosen!" };
   }
 
   queuedNames.push(name);
-  console.log(`Adding ${name} to the queue at position ${queuedNames.length}`);
+  console.log(`Adding ${name} to the pool at position ${queuedNames.length}`);
   try {
     await docRef.update({ queuedNames });
     return {
-      result: `Successfully added to the queue at position ${queuedNames.length}`,
+      result: `Successfully added to the pool at position ${queuedNames.length}`,
     };
   } catch (e) {
     console.error(e);
@@ -46,11 +46,11 @@ export async function deleteName(name: string) {
   if (queuedNames.includes(name)) {
     const idx = queuedNames.findIndex((s) => s === name);
     const deleting = queuedNames.splice(idx, 1);
-    console.log(`Removing ${deleting} from the queue`);
+    console.log(`Removing ${deleting} from the pool`);
     try {
       await docRef.update({ queuedNames });
       io.emit("refresh-lists", queuedNames, poppedNames);
-      return { result: `Successfully removed ${name} from the queue` };
+      return { result: `Successfully removed ${name} from the pool` };
     } catch (e) {
       console.error(e);
       return { error: "Something went wrong" };
@@ -58,11 +58,11 @@ export async function deleteName(name: string) {
   } else if (poppedNames.includes(name)) {
     const idx = poppedNames.findIndex((s) => s === name);
     const deleting = poppedNames.splice(idx, 1);
-    console.log(`Removing ${deleting} from the queue`);
+    console.log(`Removing ${deleting} from the pool`);
     try {
       await docRef.update({ poppedNames });
       io.emit("refresh-lists", queuedNames, poppedNames);
-      return { result: `Successfully removed ${name} from the queue` };
+      return { result: `Successfully removed ${name} from the pool` };
     } catch (e) {
       console.error(e);
       return { error: "Something went wrong" };
@@ -73,7 +73,7 @@ export async function deleteName(name: string) {
 
 export async function popName(random: boolean) {
   if (queuedNames.length === 0) {
-    return { error: "There are no names in the queue" };
+    return { error: "There are no names in the pool" };
   }
   let name = "";
   if (!random) {
@@ -85,7 +85,7 @@ export async function popName(random: boolean) {
     queuedNames.splice(idx, 1);
     poppedNames.unshift(name);
   }
-  console.log(`Popping ${name} from the queue`);
+  console.log(`Popping ${name} from the pool`);
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
@@ -99,12 +99,12 @@ export async function popName(random: boolean) {
 
 export async function popSpecificName(name: string) {
   if (!queuedNames.includes(name)) {
-    return { error: "That username is not in the queue" };
+    return { error: "That username is not in the pool" };
   }
   const idx = queuedNames.findIndex((s) => s === name);
   queuedNames.splice(idx, 1);
   poppedNames.unshift(name);
-  console.log(`Popping ${name} from the queue`);
+  console.log(`Popping ${name} from the pool`);
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
@@ -117,7 +117,7 @@ export async function popSpecificName(name: string) {
 
 export async function reOrderName(name: string, newIdx: number) {
   if (!queuedNames.includes(name)) {
-    return { error: "That username is not in the queue" };
+    return { error: "That username is not in the pool" };
   }
   const idx = queuedNames.findIndex((s) => s === name);
   const moving = queuedNames.splice(idx, 1);
@@ -137,7 +137,7 @@ export async function clearQueues(filter: string) {
     await docRef.update({ poppedNames });
     // await docRef.update({ mostRecentPop: "" });
     io.emit("refresh-lists", queuedNames, poppedNames);
-    return { result: "Successfully cleared queues" };
+    return { result: "Successfully cleared pools" };
   } catch (e) {
     console.error(e);
     return { error: "Something went wrong" };
