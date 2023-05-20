@@ -7,6 +7,7 @@ const docRef = db.collection("ViewerQueue").doc(doc);
 const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
+export let persistentList: Array<string> = document?.data()?.persistentList;
 // export let mostRecentPop: string = document?.data()?.mostRecentPop;
 
 export async function addName(name: string) {
@@ -30,9 +31,11 @@ export async function addName(name: string) {
   }
 
   queuedNames.push(name);
+  if (!persistentList.includes(name)) persistentList.push(name);
   console.log(`Adding ${name} to the pool at position ${queuedNames.length}`);
   try {
     await docRef.update({ queuedNames });
+    await docRef.update({ persistentList });
     return {
       result: `Successfully added to the pool!`,
     };
@@ -152,5 +155,7 @@ export async function clearQueues(filter: string) {
 export async function forceSync() {
   const document = await docRef.get();
   queuedNames = document?.data()?.queuedNames;
+  poppedNames = document?.data()?.poppedNames;
+  persistentList = document?.data()?.persistentList;
   return true;
 }
