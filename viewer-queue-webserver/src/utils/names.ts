@@ -8,7 +8,7 @@ const document = await docRef.get();
 export let queuedNames: Array<string> = document?.data()?.queuedNames;
 export let poppedNames: Array<string> = document?.data()?.poppedNames;
 export let persistentList: Array<string> = document?.data()?.persistentList;
-export let nameGraveyard: Map<string, boolean> = document?.data()?.nameGraveyard;
+export let nameGraveyard: { [key: string]: boolean } = document?.data()?.nameGraveyard;
 // export let mostRecentPop: string = document?.data()?.mostRecentPop;
 
 export async function addName(name: string) {
@@ -111,7 +111,7 @@ export async function killName(name: string) {
     return { error: "The specified name has not been picked." };
   }
   const idx = poppedNames.findIndex((s) => s === name);
-  nameGraveyard.set(name, true);
+  nameGraveyard[name] = true;
   try {
     await docRef.update({ nameGraveyard });
     return { result: `${name} is dead, RIP.`, name };
@@ -157,9 +157,10 @@ export async function clearQueues(filter: string) {
   if (clearPool) queuedNames = [];
   if (clearPopped) poppedNames = [];
 
-  for (const name of nameGraveyard.keys()) {
-    nameGraveyard.set(name, false);
+  for (const name in nameGraveyard) {
+    nameGraveyard[name] = false;
   }
+
   try {
     await docRef.update({ queuedNames });
     await docRef.update({ poppedNames });
