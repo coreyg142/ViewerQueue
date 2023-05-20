@@ -1,6 +1,6 @@
 <template>
   <div class="queuebox">
-    <h2>Previous names</h2>
+    <h2>Names in current run</h2>
     <div class="queue">
       <TransitionGroup name="list" tag="ol" reversed>
         <li v-for="item in queue" :key="item" class="list-item">
