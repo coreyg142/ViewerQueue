@@ -21,7 +21,7 @@ socket.on("name-popped", (...args) => {
 });
 
 socket.on("name-killed", (...args) => {
-  state.graveyard[args[0]] = true;
+  state.graveyard[args[0]] = args[1];
 });
 
 socket.on("refresh-lists", (...args) => {

@@ -40,7 +40,7 @@
       >
         <span>Current run</span>
       </span>
-      <span> | </span>
+      <!-- <span> | </span>
       <span
         role="button"
         tabindex="0"
@@ -50,7 +50,7 @@
         :class="{ btnActive: activeList === 2 }"
       >
         <span>Graveyard</span>
-      </span>
+      </span> -->
       <div v-if="loggedIn">
         <br />
         <span
@@ -129,8 +129,8 @@ export default defineComponent({
     },
     listAnimationDirection() {
       if (store.state.activeList === 0) return "slideXR";
-      else if (store.state.activeList === 1) return "slideYImm";
-      else if (store.state.activeList === 2) return "slideXL";
+      else if (store.state.activeList === 1) return "slideXL";
+      // else if (store.state.activeList === 2) return "slideXL";
       else return "slideXR";
     },
     mostRecentNameMsg() {

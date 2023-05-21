@@ -10,6 +10,13 @@
         @click="popName"
       />
       <font-awesome-icon
+        v-if="showKill"
+        class="modButton"
+        :class="killedButtonClass"
+        :icon="['fas', 'skull']"
+        @click="killName"
+      />
+      <font-awesome-icon
         v-if="showDel"
         class="modButton red"
         :icon="['fas', 'circle-xmark']"
@@ -39,8 +46,14 @@ export default defineComponent({
     showDel() {
       return this.buttonsToShow.includes("del");
     },
+    showKill() {
+      return this.buttonsToShow.includes("kill");
+    },
     killedClass() {
       return this.killed ? "killed" : "";
+    },
+    killedButtonClass() {
+      return this.killed ? "green" : "red";
     },
   },
   methods: {
@@ -75,6 +88,21 @@ export default defineComponent({
         console.log(error);
       }
     },
+    async killName() {
+      try {
+        await axios.patch(
+          `${this.apiUrl}/kill?name=${this.name}`,
+          {},
+          {
+            headers: {
+              API_AUTH: `${store.state.accessKey}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });
 </script>
@@ -86,6 +114,8 @@ export default defineComponent({
 
 .killed {
   text-decoration: line-through;
+  font-style: italic;
+  color: #ff0000;
 }
 
 .green {

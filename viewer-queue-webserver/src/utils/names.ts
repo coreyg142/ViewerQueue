@@ -110,10 +110,10 @@ export async function killName(name: string) {
     return { error: "The specified name has not been picked." };
   }
   const idx = poppedNames.findIndex((s) => s === name);
-  nameGraveyard[name] = true;
+  nameGraveyard[name] = !nameGraveyard[name];
   try {
     await docRef.update({ nameGraveyard });
-    return { result: `${name} is dead, RIP.`, name };
+    return { result: `${name} is dead, RIP.`, name, isDead: nameGraveyard[name] };
   } catch (e) {
     console.error(e);
     return { error: `Something went wrong killing ${name}` };
