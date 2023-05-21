@@ -86,6 +86,8 @@ export default defineComponent({
 
 .killed {
   text-decoration: line-through;
+  font-style: italic;
+  color: #ff0000;
 }
 
 .green {
