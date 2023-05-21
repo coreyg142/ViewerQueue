@@ -8,3 +8,4 @@ export { default as authenticate } from "./authenticate.js";
 export { default as verifyAuth } from "./verifyauth.js";
 export { default as removeName } from "./remove.js";
 export { default as clearQueues } from "./clearQueues.js";
+export { default as killName } from "./kill.js";

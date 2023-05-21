@@ -11,6 +11,7 @@ import {
   verifyAuth,
   removeName,
   clearQueues,
+  killName,
 } from "./routes/index.js";
 
 const app = express();
@@ -100,6 +101,14 @@ app.patch("/pop", (req, res) => {
   popName(req, res, io);
 });
 
+app.patch("/kill", (req, res) => {
+  console.log("/kill");
+  console.log(req.method);
+  // console.log(req.headers);
+  console.log(req.body);
+  killName(req, res, io);
+});
+
 /**
  * @api {get} /queue Get the lists of queued and previously popped names
  * @apiName GetQueue
@@ -138,9 +147,7 @@ app.get("/verifyauth", (req, res) => {
   verifyAuth(req, res);
 });
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-/**
- * Below section for development purposes only. Remove for production.
- */
+
 app.delete("/lists", (req, res) => {
   console.log("/lists");
   console.log(req.method);

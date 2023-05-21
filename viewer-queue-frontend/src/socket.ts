@@ -7,6 +7,7 @@ export const state = reactive({
   connected: false,
   queuedNames: [] as string[],
   poppedNames: [] as string[],
+  graveyard: {} as { [key: string]: boolean },
 });
 
 export const socket = io(apiUrl);
@@ -19,9 +20,14 @@ socket.on("name-popped", (...args) => {
   state.queuedNames = state.queuedNames.filter((name) => name !== args[0]);
 });
 
+socket.on("name-killed", (...args) => {
+  state.graveyard[args[0]] = true;
+});
+
 socket.on("refresh-lists", (...args) => {
   state.queuedNames = args[0];
   state.poppedNames = args[1];
+  state.graveyard = args[2];
 });
 
 socket.on("connect", async () => {
@@ -30,6 +36,7 @@ socket.on("connect", async () => {
   const response = await axios.get(apiUrl + "/queue");
   state.queuedNames = response.data.lists.queued;
   state.poppedNames = response.data.lists.popped;
+  state.graveyard = response.data.lists.graveyard;
 
   const loggedIn = storeState.state.loggedIn;
   if (loggedIn) {

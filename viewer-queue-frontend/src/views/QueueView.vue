@@ -23,9 +23,9 @@
         role="button"
         tabindex="0"
         class="queueBtn btn"
-        v-on:click="toggleQueue"
-        v-on:keypress.enter="toggleQueue"
-        :class="{ btnActive: queuedOrPrev }"
+        v-on:click="setActiveList(0)"
+        v-on:keypress.enter="setActiveList(0)"
+        :class="{ btnActive: activeList === 0 }"
       >
         <span>Pooled</span>
       </span>
@@ -34,12 +34,23 @@
         role="button"
         tabindex="0"
         class="btn"
-        v-on:click="togglePrev"
-        v-on:keypress.enter="togglePrev"
-        :class="{ btnActive: !queuedOrPrev }"
+        v-on:click="setActiveList(1)"
+        v-on:keypress.enter="setActiveList(1)"
+        :class="{ btnActive: activeList === 1 }"
       >
         <span>Current run</span>
       </span>
+      <!-- <span> | </span>
+      <span
+        role="button"
+        tabindex="0"
+        class="btn"
+        v-on:click="setActiveList(2)"
+        v-on:keypress.enter="setActiveList(2)"
+        :class="{ btnActive: activeList === 2 }"
+      >
+        <span>Graveyard</span>
+      </span> -->
       <div v-if="loggedIn">
         <br />
         <span
@@ -67,6 +78,7 @@ import { mapActions } from "vuex";
 import QueueComponent from "@/components/QueueComponent.vue";
 import PoppedComponent from "@/components/PoppedComponent.vue";
 import QueueItemComponent from "@/components/QueueItemComponent.vue";
+import GraveComponent from "@/components/GraveComponent.vue";
 import AddNameModal from "@/components/AddNameModal.vue";
 import store from "@/store";
 import { state as socketState } from "@/socket";
@@ -78,6 +90,7 @@ export default defineComponent({
   components: {
     QueueComponent,
     PoppedComponent,
+    GraveComponent,
     QueueItemComponent,
     AddNameModal,
   },
@@ -98,15 +111,27 @@ export default defineComponent({
       return store.state.loggedIn;
     },
     dynamicComponent() {
-      if (this.queuedOrPrev) return QueueComponent;
-      return PoppedComponent;
+      // if (this.activeList) return QueueComponent;
+      // return PoppedComponent;
+      switch (this.activeList) {
+        case 0:
+          return QueueComponent;
+        case 1:
+          return PoppedComponent;
+        case 2:
+          return GraveComponent;
+        default:
+          return QueueComponent;
+      }
     },
-    queuedOrPrev() {
-      return store.state.queuedOrPrev;
+    activeList() {
+      return store.state.activeList;
     },
     listAnimationDirection() {
-      if (store.state.queuedOrPrev) return "slideXR";
-      return "slideXL";
+      if (store.state.activeList === 0) return "slideXR";
+      else if (store.state.activeList === 1) return "slideXL";
+      // else if (store.state.activeList === 2) return "slideXL";
+      else return "slideXR";
     },
     mostRecentNameMsg() {
       return socketState.poppedNames.length
@@ -125,13 +150,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(["setQueuedOrPrev"]),
-    toggleQueue() {
-      this.setQueuedOrPrev(true);
-    },
-    togglePrev() {
-      this.setQueuedOrPrev(false);
-    },
+    ...mapActions(["setActiveList"]),
     closeModal() {
       this.showAddModal = false;
     },
@@ -187,7 +206,10 @@ export default defineComponent({
 .slideXL-leave-active,
 .slideY-move,
 .slideY-enter-active,
-.slideY-leave-active {
+.slideY-leave-active,
+.slideYImm-move,
+.slideYImm-enter-active,
+.slideYImm-leave-active {
   transition: all 0.6s ease;
 }
 
@@ -202,12 +224,14 @@ export default defineComponent({
 }
 
 .slideXR-leave-active,
-.slideXL-leave-active {
+.slideXL-leave-active,
+.slideYImm-leave-active {
   position: absolute;
   transition: none;
   opacity: 0;
 }
 
+.slideYImm-enter-from,
 .slideY-enter-from {
   opacity: 0;
   transform: translateY(30px);

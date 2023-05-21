@@ -5,7 +5,7 @@ const store = createStore({
     loggedIn: false,
     accessKey: "",
     logInTime: -1,
-    queuedOrPrev: true,
+    activeList: 0,
   },
   getters: {},
   mutations: {
@@ -18,8 +18,8 @@ const store = createStore({
     setLogInTime(state, logInTime: number) {
       state.logInTime = logInTime;
     },
-    setQueuedOrPrev(state, queuedOrPrev: boolean) {
-      state.queuedOrPrev = queuedOrPrev;
+    setActiveList(state, activeList: number) {
+      state.activeList = activeList;
     },
   },
   actions: {
@@ -34,8 +34,8 @@ const store = createStore({
       commit("setLoggedIn", false);
       commit("setLogInTime", -1);
     },
-    setQueuedOrPrev({ commit }, queuedOrPrev: boolean) {
-      commit("setQueuedOrPrev", queuedOrPrev);
+    setActiveList({ commit }, activeList: number) {
+      commit("setActiveList", activeList);
     },
   },
   modules: {},

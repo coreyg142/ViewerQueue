@@ -1,6 +1,6 @@
 <template>
   <div style="display: inline-block">
-    <span class="text">{{ name }}</span>
+    <span class="text" :class="killedClass">{{ name }}</span>
     <!-- <font-awesome-icon v-if="showModTools" icon="fa-solid fa-user-secret" /> -->
     <span v-if="showModTools" class="modButton">
       <font-awesome-icon
@@ -27,7 +27,7 @@ import axios from "axios";
 export default defineComponent({
   name: "QueueItemComponent",
   inject: ["apiUrl"],
-  props: ["name", "showModTools", "buttonsToShow"],
+  props: ["name", "showModTools", "buttonsToShow", "killed"],
 
   computed: {
     loggedIn() {
@@ -38,6 +38,9 @@ export default defineComponent({
     },
     showDel() {
       return this.buttonsToShow.includes("del");
+    },
+    killedClass() {
+      return this.killed ? "killed" : "";
     },
   },
   methods: {
@@ -79,6 +82,10 @@ export default defineComponent({
 .modButton {
   cursor: pointer;
   margin-left: 0.1em;
+}
+
+.killed {
+  text-decoration: line-through;
 }
 
 .green {
