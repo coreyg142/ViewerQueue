@@ -7,7 +7,7 @@
           <QueueItemComponent
             :name="item"
             :showModTools="loggedIn"
-            :buttonsToShow="['del']"
+            :buttonsToShow="['del', 'kill']"
             :killed="isDeadInCurrentRun(item)"
           />
         </li>

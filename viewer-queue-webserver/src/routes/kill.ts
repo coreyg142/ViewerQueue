@@ -26,7 +26,7 @@ export default async function killName(req: Request, res: Response, io: Server) 
       return;
     }
     res.status(200).json({ result: result.result, name: result.name });
-    io.emit("name-killed", result.name);
+    io.emit("name-killed", result.name, result.isDead);
   } else {
     res.status(401).json({ error: "Unauthorized" });
     return;
