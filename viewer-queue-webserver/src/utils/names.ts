@@ -1,5 +1,6 @@
 import { db } from "./db.js";
 import { io } from "../webserver.js";
+import { getWeightedRandomIndex } from "./miscutils.js";
 console.log("Running db query");
 const doc = process.env.DEV ? "namesListsDev" : "namesLists";
 const docRef = db.collection("ViewerQueue").doc(doc);
@@ -13,7 +14,11 @@ export let nameGraveyard: { [key: string]: boolean } = document?.data()?.nameGra
 export async function addName(name: string) {
   if (name === "testSet") {
     //TODO: remove this later
-    const testNames = ["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"];
+
+    const testNames = new Array<string>();
+    for (let i = 1; i <= 10; i++) {
+      testNames.push(`test${i}`);
+    }
     queuedNames = testNames;
     await docRef.update({ queuedNames });
     io.emit("refresh-lists", queuedNames, poppedNames, nameGraveyard);
@@ -84,13 +89,9 @@ export async function popName(random: boolean) {
     poppedNames.unshift(name);
   } else {
     let idx: number = -1;
-    // if (queuedNames.includes("eyemozzie")) {
-    //   name = "eyemozzie";
-    //   idx = queuedNames.findIndex((s) => s === name);
-    // } else {
-    idx = Math.floor(Math.random() * queuedNames.length);
+    // idx = Math.floor(Math.random() * queuedNames.length);
+    idx = getWeightedRandomIndex(queuedNames);
     name = queuedNames[idx];
-    // }
     queuedNames.splice(idx, 1);
     poppedNames.unshift(name);
   }
