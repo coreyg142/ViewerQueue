@@ -1,6 +1,6 @@
 {
   "name": "viewer-queue-webserver",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "webserver.js",
   "type": "module",
